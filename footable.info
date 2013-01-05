@@ -1,0 +1,10 @@
+name = FooTable
+description = Provides integration of the jQuery FooTable plugin into Views
+package = Views
+core = 7.x
+
+files[] = footable.install
+files[] = footable.module
+files[] = views/footable-view.tpl.php
+files[] = views/footable.view.inc
+files[] = views/footable_style_plugin.inc
