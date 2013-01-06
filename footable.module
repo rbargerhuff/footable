@@ -41,9 +41,9 @@ function footable_library() {
       ),
       'css' => array(
         $lib_path . '/css/footable-0.1.css' => array(
-	  'type' => 'file',
-	  'media' => 'screen',
-	),
+          'type' => 'file',
+          'media' => 'screen',
+        ),
       ),
     );
   }
@@ -134,8 +134,8 @@ function template_preprocess_footable_view(&$vars) {
         $query['order'] = $field;
         $query['sort'] = $initial;
         $link_options = array(
-          'html' => TRUE, 
-          'attributes' => array('title' => $title), 
+          'html' => TRUE,
+          'attributes' => array('title' => $title),
           'query' => $query,
         );
         $vars['header'][$field] = l($label, $_GET['q'], $link_options);
@@ -279,7 +279,7 @@ function template_preprocess_footable_view(&$vars) {
     $vars['caption'] = '';
   }
 
-  // Add FooTable classes and data attributes. 
+  // Add FooTable classes and data attributes.
   $vars['classes_array'][] = 'footable';
   $vars['data_class'][$options['footable']['expand']] = 'expand';
 

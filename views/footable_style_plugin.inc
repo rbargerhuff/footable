@@ -83,7 +83,6 @@ class footable_style_plugin extends views_plugin_style_table {
         '#title' => check_plain($column_label),
         '#default_value' => isset($this->options['footable']['hide'][$column_name]) ? $this->options['footable']['hide'][$column_name] : 0,
         '#options' => array('phone' => 'Phone', 'tablet' => 'Tablet'),
-        
       );
     }
   }
