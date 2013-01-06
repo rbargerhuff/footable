@@ -1,12 +1,56 @@
-# FooTable Module
+# FooTable
+
+This module provides integration for the jQuery 
+[FooTable](http://themergency.com/footable/) plugin for creating 
+responsive tables.
+
+## Dependencies
+
+The FooTable module currently requires the [Libraries 
+API](http://drupal.org/project/libraries) module, as well as the 
+[Views](http://drupal.org/project/views) module. In the future, the 
+dependency on Views may be removed, once a generic table theme function 
+has been added.
 
 ## Installation
 
-The FooTables plugin requires 
+1. If not already installed, download and install the dependencies 
+above. 
+2. Download the FooTable module and follow the instruction for 
+[installing contributed modules](http://drupal.org/node/895232).
+3. Download the [FooTable jQuery 
+plugin](https://github.com/bradvin/FooTable) and place the resulting 
+*FooTable* directory into the sites/all/libraries directory.
 
-Download and install version 7.x-2.3-alpha1 of the jQuery Update module. Enable the module. Visit the settings page (Administration » Configuration » Development » jQuery update). In testing early versions of this module, using jQuery version 1.8 caused some odd behavior in the Views UI, so version 1.7 is recommended instead.
+## Usage
+
+1. When creating a view, select the *FooTable* format.
+2. Click on the *Settings* link, under the **Format** section.
+3. Scroll down to the *FooTable Settings* section.
+4. Designate the column to be used for the *Expandable column* setting.
+5. Under the *Collapsed Columns* section, choose the "breakpoints" for 
+which each column should be hidden. 
+
+
+## Ideas for Contributions 
+
+Patches are always welcome. Some particular features that would be 
+welcome additions include:
+
+1. Adding a generic table theme function, to allow FooTable to be used 
+to style non-Views tables.
+2. Adding the ability to designate custom breakpoints and/or specify 
+different pixel widths for the default breakpoints.
+    
 
 ## Credits
 
-This module is largely based on code from the DataTables module. Many thanks to duellj for developing and contributing that module.
+This module would not be possible without the FooTable plugin itself. 
+Thanks to [bradvin](https://github.com/bradvin) for making it available 
+and to all the [others](http://themergency.com/footable/#thanks) who 
+helped inspire it.
 
+This module is largely based on code from the 
+[DataTables](http://drupal.org/project/datatables) module. Many 
+thanks to [duellj](http://drupal.org/user/168159) for developing and 
+contributing that module.
