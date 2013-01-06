@@ -1,21 +1,8 @@
 <?php
 /**
- * @file footable.module
+ * @file
  * Provides integration of the jQuery FooTable plugin into Views.
  */
-
-/**
- * Implements hook_theme().
- */
-/*
-function footable_theme($existing, $type, $theme, $path) {
-  return array(
-    'footable' => array(
-      'variables' => array('header' => NULL, 'rows' => NULL, 'attributes' => NULL, 'caption' => NULL),
-    ),
-  );
-}
-*/
 
 /**
  * Implements hook_library().

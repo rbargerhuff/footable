@@ -10,33 +10,9 @@
  * @ingroup views_style_plugins
  */
 class footable_style_plugin extends views_plugin_style_table {
-  function option_definition() {
-    $options = parent::option_definition();
-
-    unset($options['sticky']);
-    unset($options['override']);
-
-    $options['elements'] = array(
-      'default' => array(
-        'search_box' => TRUE,
-        'table_info' => TRUE,
-        'save_state' => FALSE,
-    ));
-    $options['layout'] = array(
-      'default' => array(
-        'autowidth' => FALSE,
-        'themeroller' => FALSE,
-        'sdom' => '',
-    ));
-    $options['pages'] = array(
-      'default' => array(
-        'pagination_style' => 0,
-        'length_change' => 0,
-        'display_length' => 10,
-    ));
-    return $options;
-  }
-
+  /**
+   * Adds FooTable configuration form options.
+   */
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
 
@@ -50,7 +26,7 @@ class footable_style_plugin extends views_plugin_style_table {
     $columns = $this->display->handler->get_field_labels();
     $form['footable'] = array(
       '#type' => 'fieldset',
-      '#title' => t('FooTable Settings'),
+      '#title' => t('FooTable settings'),
       '#collapsible' => FALSE,
       '#collapsed' => FALSE,
     );
@@ -58,7 +34,7 @@ class footable_style_plugin extends views_plugin_style_table {
     $field_names = $this->display->handler->get_field_labels();
 
     $form['footable']['expand'] = array(
-      '#title' => t('Expandable Column'),
+      '#title' => t('Expandable column'),
       '#type' => 'select',
       '#options' => $field_names,
       '#default_value' => $this->options['footable']['expand'],
@@ -67,7 +43,7 @@ class footable_style_plugin extends views_plugin_style_table {
 
     $form['footable']['hide'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Collapsed/Hidden Columns'),
+      '#title' => t('Collapsed columns'),
       '#collapsible' => FALSE,
       '#collapsed' => FALSE,
       '#description' => t('Select the "breakpoints" where a particular column should be hidden.'),
