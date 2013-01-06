@@ -99,6 +99,13 @@ function template_preprocess_footable_view(&$vars) {
   $renders = $handler->render_fields($result);
 
   foreach ($columns as $field => $column) {
+    // Set columns to be hidden by FooTable plugin.
+    if (!empty($options['footable']['hide'][$column])) {
+      // Breakpoint names are in the array keys, so false values need to be
+      // filtered out, then the array_keys imploded.
+      $vars['data_hide'][$column] = implode(',', array_keys(array_filter($options['footable']['hide'][$column])));
+    }
+
     // Create a second variable so we can easily find what fields we have and what the
     // CSS classes should be.
     $vars['fields'][$field] = drupal_clean_css_identifier($field);
@@ -271,12 +278,13 @@ function template_preprocess_footable_view(&$vars) {
   else {
     $vars['caption'] = '';
   }
-  $vars['data_class']['title'] = 'expand';
-  $vars['data_hide']['changed'] = 'phone,tablet';
-  $vars['data_hide']['path'] = 'phone';
+
+  // Add FooTable classes and data attributes. 
   $vars['classes_array'][] = 'footable';
+  $vars['data_class'][$options['footable']['expand']] = 'expand';
+
+  // Add FooTable library files and calling script.
   drupal_add_library('footable', 'footable');
-  // drupal_add_js(array('footable' => array('#' . $vars['id'] => $footable_options)), array('type' => 'setting', 'scope' => JS_DEFAULT));
   drupal_add_js(drupal_get_path('module', 'footable') . '/js/caller.js');
 }
 

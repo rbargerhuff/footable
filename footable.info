@@ -1,5 +1,6 @@
 name = FooTable
-description = Provides integration of the jQuery FooTable plugin into Views
+description = Provides Views integration for the jQuery FooTable plugin
+dependencies[] = views
 package = Views
 core = 7.x
 
