@@ -11,6 +11,17 @@
  */
 class footable_style_plugin extends views_plugin_style_table {
   /**
+   * Provide default options.
+   */
+  function option_definition() {
+    $options = parent::option_definition();
+
+    $options['footable'] = array('default' => array());
+
+    return $options;
+  }
+
+  /**
    * Adds FooTable configuration form options.
    */
   function options_form(&$form, &$form_state) {
