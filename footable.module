@@ -268,7 +268,9 @@ function template_preprocess_footable_view(&$vars) {
 
   // Add FooTable classes and data attributes.
   $vars['classes_array'][] = 'footable';
-  $vars['data_class'][$options['footable']['expand']] = 'expand';
+  if (!empty($options['footable']['expand'])) {
+    $vars['data_class'][$options['footable']['expand']] = 'expand';
+  }
 
   // Add FooTable library files and calling script.
   drupal_add_library('footable', 'footable');
