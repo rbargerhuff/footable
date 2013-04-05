@@ -4,6 +4,7 @@ This module provides integration for the jQuery
 [FooTable](http://themergency.com/footable/) plugin for creating 
 responsive tables.
 
+
 ## Dependencies
 
 The FooTable module currently requires the [Libraries 
@@ -11,6 +12,11 @@ API](http://drupal.org/project/libraries) module, as well as the
 [Views](http://drupal.org/project/views) module. In the future, the 
 dependency on Views may be removed, once a generic table theme function 
 has been added.
+
+To run the latest version of the FooTable plugin, you will also need
+to install the [jQuery Update](https://drupal.org/project/jquery_update)
+module. See installation step #3 below, for more details.
+
 
 ## Installation
 
@@ -20,7 +26,13 @@ above.
 [installing contributed modules](http://drupal.org/node/895232).
 3. Download the [FooTable jQuery 
 plugin](https://github.com/bradvin/FooTable) and place the resulting 
-*FooTable* directory into the sites/all/libraries directory.
+*FooTable* directory into the sites/all/libraries directory. Recent
+versions of the FooTable plugin have broken backwards compatibility
+with jQuery 1.4.4, the version included with Drupal 7 by default.
+The options are to [either install the jQuery update module or use an
+older version](https://drupal.org/node/1927442#comment-7259592) of
+the FooTable plugin.
+
 
 ## Usage
 
