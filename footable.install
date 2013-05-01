@@ -13,10 +13,10 @@ function footable_requirements($phase) {
 
   $requirements['footable']['title'] = 'FooTable';
   $requirements['footable']['value'] = NULL;
-  if (file_exists(drupal_get_path('module', 'footable') . '/FooTable/js/footable-0.1.js')) {
+  if (file_exists(drupal_get_path('module', 'footable') . '/FooTable/js/footable.js')) {
     $requirements['footable']['severity'] = REQUIREMENT_OK;
   }
-  elseif (module_exists('libraries') && file_exists(libraries_get_path('FooTable') . '/js/footable-0.1.js')) {
+  elseif (module_exists('libraries') && file_exists(libraries_get_path('FooTable') . '/js/footable.js')) {
     $requirements['footable']['severity'] = REQUIREMENT_OK;
   }
   else {

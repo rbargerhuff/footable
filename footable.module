@@ -10,10 +10,10 @@
 function footable_library() {
   // Locate the FooTables JS library (borrowed from DataTables module).
   $lib_path = NULL;
-  if (file_exists(drupal_get_path('module', 'footable') . '/FooTable/js/footable-0.1.js')) {
+  if (file_exists(drupal_get_path('module', 'footable') . '/FooTable/js/footable.js')) {
     $lib_path = drupal_get_path('module', 'footable') . '/FooTable';
   }
-  elseif (module_exists('libraries') && file_exists(libraries_get_path('FooTable') . '/js/footable-0.1.js')) {
+  elseif (module_exists('libraries') && file_exists(libraries_get_path('FooTable') . '/js/footable.js')) {
     $lib_path = libraries_get_path('FooTable');
   }
 
@@ -24,7 +24,7 @@ function footable_library() {
       'website' => 'http://themergency.com/footable/',
       'version' => '0.1',
       'js' => array(
-        $lib_path . '/js/footable-0.1.js' => array(),
+        $lib_path . '/js/footable.js' => array(),
       ),
       'css' => array(
         $lib_path . '/css/footable-0.1.css' => array(
