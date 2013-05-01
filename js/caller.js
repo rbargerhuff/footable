@@ -2,8 +2,8 @@
  * @file 
  * Calls the FooTable plugin.
  */
-jQuery(document).ready(function($) {
-  $(function() {
-    $('.footable').footable();
-  });
-});
+Drupal.behaviors.fooTable = {
+  attach: function (context, settings) {
+    jQuery('.footable').footable();
+  }
+};
