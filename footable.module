@@ -49,6 +49,24 @@ function footable_views_api() {
 }
 
 /**
+ * Implements hook_jqmulti_files().
+ */
+function footable_jqmulti_files() {
+  return array(
+    'path' => drupal_get_path('module', 'footable') . '/js/caller.js',
+  );
+}
+
+/**
+ * Implements hook_jqmulti_libraries().
+ */
+function footable_jqmulti_libraries() {
+  return array(
+    'FooTable',
+  );
+}
+
+/**
  * Display a view as a FooTable style.
  */
 function template_preprocess_footable_view(&$vars) {
@@ -276,4 +294,3 @@ function template_preprocess_footable_view(&$vars) {
   drupal_add_library('footable', 'footable');
   drupal_add_js(drupal_get_path('module', 'footable') . '/js/caller.js');
 }
-
