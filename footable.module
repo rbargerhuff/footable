@@ -294,6 +294,14 @@ function template_preprocess_footable_view(&$vars) {
   if (!empty($options['footable']['expand'])) {
     $vars['data_class'][$options['footable']['expand']] = 'expand';
   }
+  // Toggle icon style
+  if (!empty($options['footable']['icon'])) {
+    $vars['classes_array'][] = $options['footable']['icon'];
+  }
+  // Toggle icon style
+  if (!empty($options['footable']['icon_size'])) {
+    $vars['classes_array'][] = $options['footable']['icon_size'];
+  }
 
   // Add FooTable library files and calling script.
   drupal_add_library('footable', 'footable');
