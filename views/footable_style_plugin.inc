@@ -48,7 +48,7 @@ class footable_style_plugin extends views_plugin_style_table {
       '#title' => t('Expandable column'),
       '#type' => 'select',
       '#options' => $field_names,
-      '#default_value' => $this->options['footable']['expand'],
+      '#default_value' => isset($this->options['footable']['expand']) ? $this->options['footable']['expand'] : '',
       '#description' => t('Select the column where a plus/minus icon should appear.'),
     );
 
@@ -100,7 +100,7 @@ class footable_style_plugin extends views_plugin_style_table {
         '#type' => 'checkboxes',
         '#multiple' => TRUE,
         '#title' => check_plain($column_label),
-        '#default_value' => isset($this->options['footable']['hide'][$column_name]) ? $this->options['footable']['hide'][$column_name] : 0,
+        '#default_value' => isset($this->options['footable']['hide'][$column_name]) ? $this->options['footable']['hide'][$column_name] : array('phone' => 0, 'tablet' => 0),
         '#options' => array('phone' => 'Phone', 'tablet' => 'Tablet'),
       );
     }
