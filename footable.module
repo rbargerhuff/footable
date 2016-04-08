@@ -10,6 +10,7 @@
 function footable_library() {
   // Locate the FooTables JS library (borrowed from DataTables module).
   $lib_path = NULL;
+  $libraries = array();
   if (file_exists(drupal_get_path('module', 'footable') . '/FooTable/js/footable.js')) {
     $lib_path = drupal_get_path('module', 'footable') . '/FooTable';
   }
