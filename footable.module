@@ -292,7 +292,7 @@ function template_preprocess_footable_view(&$vars) {
   // Add FooTable classes and data attributes.
   $vars['classes_array'][] = 'footable';
   if (!empty($options['footable']['expand'])) {
-    $vars['data_class'][$options['footable']['expand']] = 'expand';
+    $vars['data_toggle'][$options['footable']['expand']] = 'true';
   }
   // Toggle icon style
   if (!empty($options['footable']['icon'])) {
