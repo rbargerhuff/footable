@@ -270,3 +270,79 @@ function footable_form_admin_breakpoint_delete_submit($form, &$form_state) {
   drupal_set_message(t('Successfully deleted FooTable breakpoint %breakpoint', array('%breakpoint' => $form_state['values']['name'])));
   $form_state['redirect'] = 'admin/config/user-interface/footable';
 }
+
+/**
+ * Enables a FooTable breakpoint
+ *
+ * @param $breakpoint
+ *   FooTable breakpoint loaded by footable_breakpoint_load().
+ *
+ * @see footable_form_admin_breakpoint_status_enable_submit()
+ */
+function footable_form_admin_breakpoint_status_enable($form, &$form_state, $breakpoint) {
+  return confirm_form(
+    array(
+      'machine_name' => array(
+        '#type' => 'value',
+        '#value' => $breakpoint->machine_name,
+      ),
+      'name' => array(
+        '#type' => 'value',
+        '#value' => $breakpoint->name,
+      ),
+    ),
+    t('Are you sure you want to enable the breakpoint %breakpoint?', array('%breakpoint' => $breakpoint->name)),
+    'admin/config/user-interface/footable',
+    '',
+    t('Enable')
+  );
+}
+
+/**
+ * Form submission handler for footable_form_admin_breakpoint_status_enable().
+ */
+function footable_form_admin_breakpoint_status_enable_submit($form, &$form_state) {
+  if ($breakpoint = footable_breakpoint_load($form_state['values']['machine_name'])) {
+    $breakpoint->status = 1;
+    footable_breakpoint_save($breakpoint);
+  }
+  $form_state['redirect'] = 'admin/config/user-interface/footable';
+}
+
+/**
+ * Disables a FooTable breakpoint
+ *
+ * @param $breakpoint
+ *   FooTable breakpoint loaded by footable_breakpoint_load().
+ *
+ * @see footable_form_admin_breakpoint_status_disable_submit()
+ */
+function footable_form_admin_breakpoint_status_disable($form, &$form_state, $breakpoint) {
+  return confirm_form(
+    array(
+      'machine_name' => array(
+        '#type' => 'value',
+        '#value' => $breakpoint->machine_name,
+      ),
+      'name' => array(
+        '#type' => 'value',
+        '#value' => $breakpoint->name,
+      ),
+    ),
+    t('Are you sure you want to disable the breakpoint %breakpoint?', array('%breakpoint' => $breakpoint->name)),
+    'admin/config/user-interface/footable',
+    '',
+    t('Disable')
+  );
+}
+
+/**
+ * Form submission handler for footable_form_admin_breakpoint_status_disable().
+ */
+function footable_form_admin_breakpoint_status_disable_submit($form, &$form_state) {
+  if ($breakpoint = footable_breakpoint_load($form_state['values']['machine_name'])) {
+    $breakpoint->status = 0;
+    footable_breakpoint_save($breakpoint);
+  }
+  $form_state['redirect'] = 'admin/config/user-interface/footable';
+}
