@@ -340,7 +340,7 @@ function footable_form_admin_breakpoint_status_enable($form, &$form_state, $brea
  */
 function footable_form_admin_breakpoint_status_enable_submit($form, &$form_state) {
   if ($breakpoint = footable_breakpoint_load($form_state['values']['machine_name'])) {
-    $breakpoint->status = 1;
+    $breakpoint->status = FOOTABLE_BREAKPOINT_ENABLED;
     footable_breakpoint_save($breakpoint);
   }
   $form_state['redirect'] = 'admin/config/user-interface/footable';
@@ -378,7 +378,7 @@ function footable_form_admin_breakpoint_status_disable($form, &$form_state, $bre
  */
 function footable_form_admin_breakpoint_status_disable_submit($form, &$form_state) {
   if ($breakpoint = footable_breakpoint_load($form_state['values']['machine_name'])) {
-    $breakpoint->status = 0;
+    $breakpoint->status = FOOTABLE_BREAKPOINT_DISABLED;
     footable_breakpoint_save($breakpoint);
   }
   $form_state['redirect'] = 'admin/config/user-interface/footable';

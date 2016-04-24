@@ -6,8 +6,9 @@
  */
 
 define('FOOTABLE_PLUGIN_PATH', 'sites/all/libraries/footable');
-
 define('FOOTABLE_PLUGIN_VERSION_MIN', '3.0.6');
+define('FOOTABLE_BREAKPOINT_ENABLED', 1);
+define('FOOTABLE_BREAKPOINT_DISABLED', 0);
 
 /**
  * Implements hook_permission().
@@ -431,7 +432,7 @@ function template_preprocess_footable_view(&$vars) {
   }
 
   $breakpoints = array();
-  foreach (footable_breakpoint_load_multiple() as $breakpoint) {
+  foreach (footable_breakpoint_load_multiple(array(), FOOTABLE_BREAKPOINT_ENABLED) as $breakpoint) {
     $breakpoints[$breakpoint->machine_name] = (int) $breakpoint->breakpoint;
   }
   $vars['footable']['attributes']['data-breakpoints'] = drupal_json_encode($breakpoints);
@@ -521,13 +522,20 @@ function footable_breakpoint_sort($a, $b) {
 }
 
 /**
+ * Returns a list of FooTable breakpoints filtered by machine name, including
+ * or excluding the default FooTable breakpoints (All / Default).
+ *
  * @param bool $default
- *   Include the default FooTable breakpoints (All / Default)
+ *   Include the default FooTable breakpoints (All / Default).
+ *
+ * @param int $status
+ *   Only load enabled or disabled breakpoints.
  *
  * @return array
+ *   List of loaded FooTable breakpoints.
  */
-function footable_breakpoint_load_all($default = FALSE) {
-  $breakpoints = footable_breakpoint_load_multiple();
+function footable_breakpoint_load_all($default = FALSE, $status = NULL) {
+  $breakpoints = footable_breakpoint_load_multiple(array(), $status);
 
   if ($default) {
     $breakpoints['all'] = (object) array(
@@ -550,24 +558,37 @@ function footable_breakpoint_load_all($default = FALSE) {
 }
 
 /**
- * Returns a list of breakpoints filtered by machine name.
+ * Returns a list of FooTable breakpoints filtered by machine name.
  *
  * @param array $machine_names
  *   List of machines names to filter by or an empty array to load all
  *   breakpoints
  *
+ * @param int $status
+ *   Only load enabled or disabled breakpoints.
+ *
  * @return array
+ *   List of loaded FooTable breakpoints.
  */
-function footable_breakpoint_load_multiple($machine_names = array()) {
+function footable_breakpoint_load_multiple($machine_names = array(), $status = NULL) {
   ctools_include('export');
   $breakpoints = empty($machine_names) ? ctools_export_load_object('footable_breakpoint') : ctools_export_load_object('footable_breakpoint', 'names', $machine_names);
   drupal_alter('footable_breakpoint_load', $breakpoints);
+
+  if (isset($status)) {
+    foreach ($breakpoints as $machine_name => $breakpoint) {
+      if ($breakpoint->status != $status) {
+        unset($breakpoints[$machine_name]);
+      }
+    }
+  }
+
   uasort($breakpoints, 'footable_breakpoint_sort');
   return $breakpoints;
 }
 
 /**
- * Load a single breakpoint by machine_name.
+ * Load a single FooTable breakpoint by machine name.
  *
  * @param $machine_name
  *   The breakpoint machine name.
@@ -587,11 +608,13 @@ function footable_breakpoint_load($machine_name) {
  * Save a breakpoint.
  *
  * @param $breakpoint
- *   Breakpoint object to save to the database. A new breakpoint will be created
- *   if $breakpoint->is_new is set to TRUE, otherwise the breakpoint will be
- *   updated.
+ *   FooTable breakpoint object to save to the database. A new breakpoint will
+ *   be created if $breakpoint->is_new is set to TRUE, otherwise the breakpoint
+ *   will be updated.
  *
  * @return bool|int
+ *   If the record insert or update failed, returns FALSE. If it succeeded,
+ *   returns SAVED_NEW or SAVED_UPDATED, depending on the operation performed.
  */
 function footable_breakpoint_save($breakpoint) {
   $update = !empty($breakpoint->is_new) || !empty($breakpoint->in_code_only) ? array() : 'machine_name';

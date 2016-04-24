@@ -118,7 +118,7 @@ class footable_plugin_style_footable extends views_plugin_style_table {
     );
 
     $breakpoints = array();
-    foreach (footable_breakpoint_load_all(TRUE) as $breakpoint) {
+    foreach (footable_breakpoint_load_all(TRUE, FOOTABLE_BREAKPOINT_ENABLED) as $breakpoint) {
       $breakpoints[$breakpoint->machine_name] = check_plain($breakpoint->name);
     }
 
