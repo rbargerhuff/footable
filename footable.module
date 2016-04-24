@@ -2,8 +2,12 @@
 
 /**
  * @file
- * Provides integration of the jQuery FooTable plugin into Views.
+ * Provides Views integration for the jQuery FooTable plugin.
  */
+
+define('FOOTABLE_PLUGIN_PATH', 'sites/all/libraries/footable');
+
+define('FOOTABLE_PLUGIN_VERSION_MIN', '3.0.6');
 
 /**
  * Implements hook_libraries_info().
