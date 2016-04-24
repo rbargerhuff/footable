@@ -491,3 +491,16 @@ function footable_breakpoint_save($breakpoint) {
   return $result;
 }
 
+/**
+ * Delete a single breakpoint by machine_name.
+ *
+ * @param $machine_name
+ *   The breakpoint machine name.
+ */
+function footable_breakpoint_delete($machine_name) {
+  db_delete('footable_breakpoint')
+    ->condition('machine_name', $machine_name)
+    ->execute();
+  ctools_include('export');
+  ctools_export_load_object_reset('footable_breakpoint');
+}

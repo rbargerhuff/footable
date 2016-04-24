@@ -234,3 +234,39 @@ function theme_footable_form_admin_breakpoint($variables) {
 
   return $output;
 }
+
+/**
+ * Deletes a FooTable breakpoint
+ *
+ * @param $breakpoint
+ *   FooTable breakpoint loaded by footable_breakpoint_load().
+ *
+ * @see footable_form_admin_config_breakpoint_delete_submit()
+ */
+function footable_form_admin_breakpoint_delete($form, &$form_state, $breakpoint) {
+  return confirm_form(
+    array(
+      'machine_name' => array(
+        '#type' => 'value',
+        '#value' => $breakpoint->machine_name,
+      ),
+      'name' => array(
+        '#type' => 'value',
+        '#value' => $breakpoint->name,
+      ),
+    ),
+    t('Are you sure you want to remove the breakpoint %breakpoint?', array('%breakpoint' => $breakpoint->name)),
+    'admin/config/user-interface/footable',
+    t('This action cannot be undone.'),
+    t('Delete')
+  );
+}
+
+/**
+ * Form submission handler for footable_form_admin_breakpoint_delete().
+ */
+function footable_form_admin_breakpoint_delete_submit($form, &$form_state) {
+  footable_breakpoint_delete($form_state['values']['machine_name']);
+  drupal_set_message(t('Successfully deleted FooTable breakpoint %breakpoint', array('%breakpoint' => $form_state['values']['name'])));
+  $form_state['redirect'] = 'admin/config/user-interface/footable';
+}
