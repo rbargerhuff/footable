@@ -346,3 +346,20 @@ function footable_form_admin_breakpoint_status_disable_submit($form, &$form_stat
   }
   $form_state['redirect'] = 'admin/config/user-interface/footable';
 }
+
+/**
+ * Export a FooTable breakpoint
+ *
+ * @param $breakpoint
+ *   Breakpoint loaded by footable_breakpoint_load().
+ */
+function footable_form_admin_breakpoint_export($form, &$form_state, $breakpoint) {
+  ctools_include('export');
+  $form['export'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Export'),
+    '#rows' => 20,
+    '#default_value' => ctools_export_object('footable_breakpoint', $breakpoint),
+  );
+  return $form;
+}
