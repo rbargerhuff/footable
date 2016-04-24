@@ -6,6 +6,44 @@
  */
 
 /**
+ * FooTable settings configuration form.
+ */
+function footable_form_admin_settings($form, &$form_state) {
+  $form['config'] = array(
+    '#type' => 'vertical_tabs',
+  );
+
+  $form['config']['plugin'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Plugin'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+
+  $form['config']['plugin']['footable_plugin_type'] = array(
+    '#type' => 'radios',
+    '#title' => t('Type'),
+    '#options' => array(
+      'standalone' => t('Standalone'),
+      'bootstrap' => t('Bootstrap'),
+    ),
+    '#default_value' => variable_get('footable_plugin_type', 'standalone'),
+  );
+
+  $form['config']['plugin']['footable_plugin_compression'] = array(
+    '#type' => 'radios',
+    '#title' => t('Compression level'),
+    '#options' => array(
+      'minified' => t('Production (minified)'),
+      'source' => t('Development (uncompressed)'),
+    ),
+    '#default_value' => variable_get('footable_plugin_compression', 'minified'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
  *  FooTable breakpoints configuration form.
  */
 function footable_form_admin_breakpoint($form, &$form_state) {
@@ -183,7 +221,6 @@ function footable_form_admin_breakpoint_submit($form, &$form_state) {
 
   drupal_set_message(t('The breakpoints have been saved.'));
 }
-
 
 /**
  * Themable display of the FooTable breakpoint configuration table.
