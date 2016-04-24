@@ -47,3 +47,131 @@ function footable_requirements($phase) {
 
   return $requirements;
 }
+
+/**
+ * Implements hook_schema().
+ */
+function footable_schema() {
+  $schema['footable_breakpoint'] = array(
+    'description' => 'Table storing FooTable breakpoints.',
+    'export' => array(
+      'key' => 'machine_name',
+      'key name' => 'Machine name',
+      'primary key' => 'id',
+      'identifier' => 'footable_breakpoint',
+      'default hook' => 'default_footable_breakpoint',
+      'api' => array(
+        'owner' => 'footable',
+        'api' => 'footable_breakpoint',
+        'minimum_version' => 1,
+        'current_version' => 1,
+      ),
+    ),
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'The internal identifier of a FooTable breakpoint',
+        'no export' => TRUE,
+      ),
+      'machine_name' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'A machine readable name of a FooTable breakpoint.',
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'A human readable name of a FooTable breakpoint.',
+      ),
+      'breakpoint' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'FooTable breakpoint at which the column should be hidden.',
+      ),
+      'status' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+        'description' => 'Enabled or disabled',
+      ),
+      'weight' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Weight',
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'machine_name' => array('machine_name'),
+    ),
+  );
+  return $schema;
+}
+
+/**
+ * Add the FooTable breakpoint table.
+ */
+function footable_update_7200() {
+  $schema['footable_breakpoint'] = array(
+    'description' => 'Table storing FooTable breakpoints.',
+    'export' => array(
+      'key' => 'machine_name',
+      'key name' => 'Machine name',
+      'primary key' => 'id',
+      'identifier' => 'footable_breakpoint',
+      'default hook' => 'default_footable_breakpoint',
+      'api' => array(
+        'owner' => 'footable',
+        'api' => 'footable_breakpoint',
+        'minimum_version' => 1,
+        'current_version' => 1,
+      ),
+    ),
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'The internal identifier of a FooTable breakpoint',
+        'no export' => TRUE,
+      ),
+      'machine_name' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'A machine readable name of a FooTable breakpoint.',
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'description' => 'A human readable name of a FooTable breakpoint.',
+      ),
+      'breakpoint' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'FooTable breakpoint at which the column should be hidden.',
+      ),
+      'status' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+        'description' => 'Enabled or disabled',
+      ),
+      'weight' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Weight',
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'machine_name' => array('machine_name'),
+    ),
+  );
+  db_create_table('footable_breakpoint', $schema['footable_breakpoint']);
+}

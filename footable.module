@@ -318,3 +318,12 @@ function template_preprocess_footable_view(&$vars) {
   drupal_add_library('footable', 'footable');
   drupal_add_js(drupal_get_path('module', 'footable') . '/js/caller.js');
 }
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function footable_ctools_plugin_api($module, $api) {
+  if ($module == 'footable' && $api == 'footable_breakpoint') {
+    return array('version' => 1);
+  }
+}

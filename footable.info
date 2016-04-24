@@ -1,11 +1,12 @@
 name = FooTable
-description = Provides Views integration for the jQuery FooTable plugin
-dependencies[] = views
+description = Provides Views integration for the jQuery FooTable plugin.
 package = Views
 core = 7.x
+configure = admin/config/user-interface/footable
 
-files[] = footable.install
-files[] = footable.module
+dependencies[] = ctools
+dependencies[] = libraries
+dependencies[] = views
+
 files[] = views/footable-view.tpl.php
-files[] = views/footable.view.inc
-files[] = views/footable_style_plugin.inc
+files[] = views/footable_plugin_style_footable.inc
