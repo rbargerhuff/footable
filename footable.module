@@ -327,3 +327,48 @@ function footable_ctools_plugin_api($module, $api) {
     return array('version' => 1);
   }
 }
+
+/**
+ * Implements hook_default_footable_breakpoint().
+ */
+function footable_default_footable_breakpoint() {
+  $export = array();
+
+  $breakpoint = new stdClass;
+  $breakpoint->api_version = 1;
+  $breakpoint->name = 'Extra small devices';
+  $breakpoint->machine_name = 'xs';
+  $breakpoint->breakpoint = 480;
+  $breakpoint->status = 1;
+  $breakpoint->weight = 0;
+  $export[$breakpoint->machine_name] = $breakpoint;
+
+  $breakpoint = new stdClass;
+  $breakpoint->api_version = 1;
+  $breakpoint->name = 'Small devices';
+  $breakpoint->machine_name = 'sm';
+  $breakpoint->breakpoint = 768;
+  $breakpoint->status = 1;
+  $breakpoint->weight = 1;
+  $export[$breakpoint->machine_name] = $breakpoint;
+
+  $breakpoint = new stdClass;
+  $breakpoint->api_version = 1;
+  $breakpoint->name = 'Medium devices';
+  $breakpoint->machine_name = 'md';
+  $breakpoint->breakpoint = 992;
+  $breakpoint->status = 1;
+  $breakpoint->weight = 2;
+  $export[$breakpoint->machine_name] = $breakpoint;
+
+  $breakpoint = new stdClass;
+  $breakpoint->api_version = 1;
+  $breakpoint->name = 'Large devices';
+  $breakpoint->machine_name = 'lg';
+  $breakpoint->breakpoint = 1200;
+  $breakpoint->status = 1;
+  $breakpoint->weight = 3;
+  $export[$breakpoint->machine_name] = $breakpoint;
+
+  return $export;
+}
