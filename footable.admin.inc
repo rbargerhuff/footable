@@ -183,3 +183,54 @@ function footable_form_admin_breakpoint_submit($form, &$form_state) {
 
   drupal_set_message(t('The breakpoints have been saved.'));
 }
+
+
+/**
+ * Themable display of the FooTable breakpoint configuration table.
+ */
+function theme_footable_form_admin_breakpoint($variables) {
+  $form = $variables['form'];
+
+  $header = array(
+    t('Name'),
+    t('Machine name'),
+    t('Breakpoint'),
+    t('Status'),
+    t('Weight'),
+    array(
+      'data' => t('Operations'),
+      'colspan' => 3,
+    ),
+  );
+
+  $rows = array();
+  foreach (element_children($form['footable_breakpoint']) as $key) {
+    $form['footable_breakpoint'][$key]['weight']['#attributes']['class'][] = 'footable-breakpoint-weight';
+
+    $rows[] = array(
+      'data' => array(
+        drupal_render($form['footable_breakpoint'][$key]['name']),
+        drupal_render($form['footable_breakpoint'][$key]['machine_name']),
+        drupal_render($form['footable_breakpoint'][$key]['breakpoint']),
+        drupal_render($form['footable_breakpoint'][$key]['status']),
+        drupal_render($form['footable_breakpoint'][$key]['statustoggle']),
+        drupal_render($form['footable_breakpoint'][$key]['weight']),
+        drupal_render($form['footable_breakpoint'][$key]['delete']),
+        drupal_render($form['footable_breakpoint'][$key]['export']),
+      ),
+      'class' => array('draggable'),
+    );
+  }
+
+  $table = array(
+    'header' => $header,
+    'rows' => $rows,
+    'attributes' => array('id' => 'footable-breakpoints-table'),
+  );
+
+  $output = theme('table', $table);
+  $output .= drupal_render_children($form);
+  drupal_add_tabledrag('footable-breakpoints-table', 'order', 'sibling', 'footable-breakpoint-weight');
+
+  return $output;
+}
