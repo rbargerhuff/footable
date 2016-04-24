@@ -220,7 +220,7 @@ function template_preprocess_footable_view(&$vars) {
     if (!empty($options['footable']['breakpoint'][$column])) {
       // Breakpoint names are in the array keys, so false values need to be
       // filtered out, then the array_keys will be imploded.
-      $vars['data_breakpoints'][$column] = implode(',', array_keys(array_filter($options['footable']['breakpoint'][$column])));
+      $vars['data_breakpoints'][$column] = implode(' ', array_keys(array_filter($options['footable']['breakpoint'][$column])));
     }
 
     // Create a second variable so we can easily find what fields we have and what the
@@ -432,9 +432,9 @@ function template_preprocess_footable_view(&$vars) {
 
   $breakpoints = array();
   foreach (footable_breakpoint_load_multiple() as $breakpoint) {
-    $breakpoints[$breakpoint->machine_name] = $breakpoint->breakpoint;
+    $breakpoints[$breakpoint->machine_name] = (int) $breakpoint->breakpoint;
   }
-  $vars['footable']['breakpoints'] = drupal_json_encode($breakpoints);
+  $vars['footable']['attributes']['data-breakpoints'] = drupal_json_encode($breakpoints);
 
   // Add FooTable plugin files and calling script.
   footable_libraries_load();

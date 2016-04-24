@@ -20,7 +20,7 @@
 ?>
 <table
   <?php foreach ($footable['attributes'] as $name => $value): ?>
-    <?php print $name . '="' . $value . '" '; ?>
+    <?php print $name . "='" . $value . "' "; ?>
   <?php endforeach; ?>
   <?php if ($classes): print 'class="' . $classes . '" '; endif; ?>
   <?php print $attributes; ?>>
