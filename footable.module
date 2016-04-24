@@ -10,6 +10,117 @@ define('FOOTABLE_PLUGIN_PATH', 'sites/all/libraries/footable');
 define('FOOTABLE_PLUGIN_VERSION_MIN', '3.0.6');
 
 /**
+ * Implements hook_permission().
+ */
+function footable_permission() {
+  return array(
+    'administer footable' => array(
+      'title' => t('Administer FooTable'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function footable_menu() {
+  $items['admin/config/user-interface/footable'] = array(
+    'title' => 'FooTable',
+    'description' => 'Configure FooTable breakpoints.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('footable_form_admin_breakpoint'),
+    'access arguments' => array('administer footable'),
+    'file' => 'footable.admin.inc',
+  );
+  $items['admin/config/user-interface/footable/breakpoint'] = array(
+    'title' => 'Breakpoints',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/config/user-interface/footable/breakpoint/%footable_breakpoint/delete'] = array(
+    'title' => 'Delete breakpoint',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('footable_form_admin_breakpoint_delete', 5),
+    'access arguments' => array('administer footable'),
+    'file' => 'footable.admin.inc',
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/config/user-interface/footable/breakpoint/%footable_breakpoint/enable'] = array(
+    'title' => 'Enable breakpoint',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('footable_form_admin_breakpoint_status_enable', 5),
+    'access arguments' => array('administer footable'),
+    'file' => 'footable.admin.inc',
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/config/user-interface/footable/breakpoint/%footable_breakpoint/disable'] = array(
+    'title' => 'Disable breakpoint',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('footable_form_admin_breakpoint_status_disable', 5),
+    'access arguments' => array('administer footable'),
+    'file' => 'footable.admin.inc',
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/config/user-interface/footable/breakpoint/%footable_breakpoint/export'] = array(
+    'title' => 'Export breakpoint',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('footable_form_admin_breakpoint_export', 5),
+    'access arguments' => array('administer footable'),
+    'file' => 'footable.admin.inc',
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/config/user-interface/footable/settings'] = array(
+    'title' => 'Settings',
+    'description' => 'Configure FooTable settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('footable_form_admin_settings'),
+    'access arguments' => array('administer footable'),
+    'file' => 'footable.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function footable_theme($existing, $type, $theme, $path) {
+  return array(
+    'footable_form_admin_breakpoint' => array(
+      'render element' => 'form',
+      'file' => 'footable.admin.inc',
+    ),
+  );
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function footable_views_api() {
+  return array(
+    'api' => 3.0,
+    'path' => drupal_get_path('module', 'footable') . '/views',
+  );
+}
+
+/**
+ * Implements hook_jqmulti_files().
+ */
+function footable_jqmulti_files() {
+  return array(
+    drupal_get_path('module', 'footable') . '/footable.js',
+  );
+}
+
+/**
+ * Implements hook_jqmulti_libraries().
+ */
+function footable_jqmulti_libraries() {
+  return array(
+    'footable',
+  );
+}
+
+/**
  * Implements hook_libraries_info().
  */
 function footable_libraries_info() {
@@ -55,47 +166,20 @@ function footable_libraries_info() {
 }
 
 /**
- * Implements hook_theme().
+ * Load the FooTable library.
+ *
+ * @see libraries_load()
  */
-function footable_theme($existing, $type, $theme, $path) {
-  return array(
-    'footable_form_admin_breakpoint' => array(
-      'render element' => 'form',
-      'file' => 'footable.admin.inc',
-    ),
-  );
-}
-
-/**
- * Implements hook_views_api().
- */
-function footable_views_api() {
-  return array(
-    'api' => 3.0,
-    'path' => drupal_get_path('module', 'footable') . '/views',
-  );
-}
-
-/**
- * Implements hook_jqmulti_files().
- */
-function footable_jqmulti_files() {
-  return array(
-    'path' => drupal_get_path('module', 'footable') . '/js/caller.js',
-  );
-}
-
-/**
- * Implements hook_jqmulti_libraries().
- */
-function footable_jqmulti_libraries() {
-  return array(
-    'FooTable',
-  );
+function footable_libraries_load() {
+  $type = variable_get('footable_plugin_type', 'standalone');
+  $compression = variable_get('footable_plugin_compression', 'minified');
+  libraries_load('footable', $type . '_' . $compression);
 }
 
 /**
  * Display a view as a FooTable style.
+ *
+ * @see template_preprocess_views_view_table()
  */
 function template_preprocess_footable_view(&$vars) {
   $view = $vars['view'];
@@ -133,10 +217,10 @@ function template_preprocess_footable_view(&$vars) {
 
   foreach ($columns as $field => $column) {
     // Set columns to be hidden by FooTable plugin.
-    if (!empty($options['footable']['hide'][$column])) {
+    if (!empty($options['footable']['breakpoint'][$column])) {
       // Breakpoint names are in the array keys, so false values need to be
-      // filtered out, then the array_keys imploded.
-      $vars['data_hide'][$column] = implode(',', array_keys(array_filter($options['footable']['hide'][$column])));
+      // filtered out, then the array_keys will be imploded.
+      $vars['data_breakpoints'][$column] = implode(',', array_keys(array_filter($options['footable']['breakpoint'][$column])));
     }
 
     // Create a second variable so we can easily find what fields we have and what the
@@ -248,7 +332,7 @@ function template_preprocess_footable_view(&$vars) {
       }
     }
 
-    // Remove columns if the option is hide empty column is checked and the field is not empty.
+    // Remove columns if the option is breakpoint empty column is checked and the field is not empty.
     if (!empty($options['info'][$field]['empty_column'])) {
       $empty = TRUE;
       foreach ($vars['rows'] as $num => $columns) {
@@ -314,21 +398,47 @@ function template_preprocess_footable_view(&$vars) {
 
   // Add FooTable classes and data attributes.
   $vars['classes_array'][] = 'footable';
-  if (!empty($options['footable']['expand'])) {
-    $vars['data_toggle'][$options['footable']['expand']] = 'true';
-  }
-  // Toggle icon style
-  if (!empty($options['footable']['icon'])) {
-    $vars['classes_array'][] = $options['footable']['icon'];
-  }
-  // Toggle icon style
-  if (!empty($options['footable']['icon_size'])) {
-    $vars['classes_array'][] = $options['footable']['icon_size'];
+  $vars['footable'] = array('attributes' => array(), 'breakpoints' => '');
+
+  // Expand first row
+  $expand_first = isset($options['footable']['expand_first']) ? $options['footable']['expand_first'] : FALSE;
+  $vars['footable']['attributes']['data-expand-first'] = $expand_first ? 'true' : 'false';
+
+  // Show header
+  $show_header = isset($options['footable']['show_header']) ? $options['footable']['show_header'] : TRUE;
+  $vars['footable']['attributes']['data-show-header'] = $show_header ? 'true' : 'false';
+
+  // Expandable column
+  $vars['footable']['attributes']['data-toggle-column'] = isset($options['footable']['toggle_column']) ? $options['footable']['toggle_column'] : 'first';
+
+  // Add Bootstrap configuration
+  if (variable_get('footable_plugin_type', 'standalone') == 'bootstrap') {
+    if (!empty($options['footable']['bootstrap']['striped'])) {
+      $vars['classes_array'][] = 'table-striped';
+    }
+
+    if (!empty($options['footable']['bootstrap']['bordered'])) {
+      $vars['classes_array'][] = 'table-bordered';
+    }
+
+    if (!empty($options['footable']['bootstrap']['hover'])) {
+      $vars['classes_array'][] = 'table-hover';
+    }
+
+    if (!empty($options['footable']['bootstrap']['condensed'])) {
+      $vars['classes_array'][] = 'table-condensed';
+    }
   }
 
-  // Add FooTable library files and calling script.
-  drupal_add_library('footable', 'footable');
-  drupal_add_js(drupal_get_path('module', 'footable') . '/js/caller.js');
+  $breakpoints = array();
+  foreach (footable_breakpoint_load_multiple() as $breakpoint) {
+    $breakpoints[$breakpoint->machine_name] = $breakpoint->breakpoint;
+  }
+  $vars['footable']['breakpoints'] = drupal_json_encode($breakpoints);
+
+  // Add FooTable plugin files and calling script.
+  footable_libraries_load();
+  drupal_add_js(drupal_get_path('module', 'footable') . '/footable.js');
 }
 
 /**

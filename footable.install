@@ -54,19 +54,6 @@ function footable_requirements($phase) {
 function footable_schema() {
   $schema['footable_breakpoint'] = array(
     'description' => 'Table storing FooTable breakpoints.',
-    'export' => array(
-      'key' => 'machine_name',
-      'key name' => 'Machine name',
-      'primary key' => 'id',
-      'identifier' => 'footable_breakpoint',
-      'default hook' => 'default_footable_breakpoint',
-      'api' => array(
-        'owner' => 'footable',
-        'api' => 'footable_breakpoint',
-        'minimum_version' => 1,
-        'current_version' => 1,
-      ),
-    ),
     'fields' => array(
       'id' => array(
         'type' => 'serial',
