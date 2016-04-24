@@ -1,45 +1,51 @@
 <?php
+
 /**
  * @file
  * Provides integration of the jQuery FooTable plugin into Views.
  */
 
 /**
- * Implements hook_library().
+ * Implements hook_libraries_info().
  */
-function footable_library() {
-  // Locate the FooTables JS library (borrowed from DataTables module).
-  $lib_path = NULL;
-  $libraries = array();
-  if (file_exists(drupal_get_path('module', 'footable') . '/FooTable/js/footable.js')) {
-    $lib_path = drupal_get_path('module', 'footable') . '/FooTable';
-  }
-  elseif (module_exists('libraries') && file_exists(libraries_get_path('FooTable') . '/js/footable.js')) {
-    $lib_path = libraries_get_path('FooTable');
-  }
-
-  // Make sure we have a valid library path before returning library load info
-  if (!empty($lib_path)) {
-    // CSS file changed in v2.
-    $css_file = file_exists($lib_path . '/css/footable.core.min.css')
-      ? $lib_path . '/css/footable.core.min.css'
-      : $lib_path . '/css/footable-0.1.css';
-
-    $libraries['footable'] = array(
-      'title' => 'FooTable',
-      'website' => 'http://themergency.com/footable/',
-      'version' => '0.1',
-      'js' => array(
-        $lib_path . '/js/footable.js' => array(),
-      ),
-      'css' => array(
-        $css_file => array(
-          'type' => 'file',
-          'media' => 'screen',
+function footable_libraries_info() {
+  $libraries['footable'] = array(
+    'name' => 'FooTable',
+    'vendor url' => 'https://github.com/fooplugins/FooTable',
+    'download url' => 'https://github.com/fooplugins/FooTable/tags',
+    'version arguments' => array(
+      'file' => 'footable.min.js',
+      // FooTable 3.0.x
+      'pattern' => '#version ([0-9\.a-z]+)#',
+      'lines' => 10,
+    ),
+    'variants' => array(
+      'standalone_source' => array(
+        'files' => array(
+          'js' => array('footable.js'),
+          'css' => array('footable.standalone.css'),
         ),
       ),
-    );
-  }
+      'standalone_minified' => array(
+        'files' => array(
+          'js' => array('footable.min.js'),
+          'css' => array('footable.standalone.min.css'),
+        ),
+      ),
+      'bootstrap_source' => array(
+        'files' => array(
+          'js' => array('footable.js'),
+          'css' => array('footable.bootstrap.css'),
+        ),
+      ),
+      'bootstrap_minified' => array(
+        'files' => array(
+          'js' => array('footable.min.js'),
+          'css' => array('footable.bootstrap.min.css'),
+        ),
+      ),
+    ),
+  );
 
   return $libraries;
 }
