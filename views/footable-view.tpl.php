@@ -19,13 +19,7 @@
  * @ingroup views_templates
  */
 ?>
-<table
-  <?php foreach ($footable['attributes'] as $name => $value): ?>
-    <?php print $name . "='" . $value . "' "; ?>
-  <?php endforeach; ?>
-  <?php if ($classes): print 'class="' . $classes . '" '; endif; ?>
-  <?php print $attributes; ?>>
-
+<table <?php if (!empty($footable['attributes'])): print drupal_attributes($footable['attributes']); endif; ?><?php if ($classes): print 'class="' . $classes . '" '; endif; ?><?php print $attributes; ?>>
   <?php if (!empty($title)) : ?>
     <caption><?php print $title; ?></caption>
   <?php endif; ?>
@@ -33,7 +27,7 @@
     <thead>
     <tr>
       <?php foreach ($header as $field => $label): ?>
-        <th <?php if (!empty($data_toggle[$field])): print 'data-toggle="' . $data_toggle[$field] . '" '; endif; ?><?php if (!empty($data_breakpoints[$field])): print 'data-breakpoints="' . $data_breakpoints[$field] . '" '; endif; ?><?php if ($header_classes[$field]): print 'class="' . $header_classes[$field] . '" '; endif; ?>>
+        <th <?php if (!empty($column_attributes[$field])): print drupal_attributes($column_attributes[$field]); endif; ?><?php if ($header_classes[$field]): print 'class="' . $header_classes[$field] . '" '; endif; ?>>
           <?php print $label; ?>
         </th>
       <?php endforeach; ?>

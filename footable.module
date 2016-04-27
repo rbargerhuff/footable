@@ -216,11 +216,15 @@ function template_preprocess_footable_view(&$vars) {
   $renders = $handler->render_fields($result);
 
   foreach ($columns as $field => $column) {
+    $vars['column_attributes'][$column] = array(
+      'data-type' => 'html',
+    );
+
     // Set columns to be hidden by FooTable plugin.
     if (!empty($options['footable']['breakpoint'][$column])) {
       // Breakpoint names are in the array keys, so false values need to be
       // filtered out, then the array_keys will be imploded.
-      $vars['data_breakpoints'][$column] = implode(' ', array_keys(array_filter($options['footable']['breakpoint'][$column])));
+      $vars['column_attributes'][$column]['data-breakpoints'] = implode(' ', array_keys(array_filter($options['footable']['breakpoint'][$column])));
     }
 
     // Create a second variable so we can easily find what fields we have and
