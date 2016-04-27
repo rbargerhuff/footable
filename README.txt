@@ -47,12 +47,12 @@ your project. The easiest way to do this is by installing the following module:
 INSTALLATION
 ------------
 
- * Module: Install as you would normally install a contributed Drupal module. See:
-   https://drupal.org/documentation/install/modules-themes/modules-7 for further
-   information.
+ * Module: Install as you would normally install a contributed Drupal module.
+   See: https://drupal.org/documentation/install/modules-themes/modules-7 for
+   further information.
 
- * Plugin: Download the most recent 3.x.x version of the FooTable jQuery plugin from
-   https://github.com/fooplugins/FooTable/blob/V3/releases/footable-bootstrap.latest.zip
+ * Plugin: Download the most recent 3.x.x version of the FooTable jQuery plugin
+   from https://github.com/fooplugins/FooTable/blob/V3/releases/footable-bootstrap.latest.zip
    and move the contents of the compiled directory into the sites/all/libraries/footable
    directory.
 

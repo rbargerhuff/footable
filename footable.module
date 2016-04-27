@@ -131,7 +131,7 @@ function footable_libraries_info() {
     'download url' => 'https://github.com/fooplugins/FooTable/tags',
     'version arguments' => array(
       'file' => 'footable.min.js',
-      // FooTable 3.0.x
+      // FooTable 3.0.x.
       'pattern' => '#version ([0-9\.a-z]+)#',
       'lines' => 10,
     ),
@@ -185,11 +185,11 @@ function footable_libraries_load() {
 function template_preprocess_footable_view(&$vars) {
   $view = $vars['view'];
 
-  // We need the raw data for this grouping, which is passed in as $vars['rows'].
-  // However, the template also needs to use for the rendered fields.  We
-  // therefore swap the raw data out to a new variable and reset $vars['rows']
-  // so that it can get rebuilt.
-  // Store rows so that they may be used by further preprocess functions.
+  // We need the raw data for this grouping, which is passed in as
+  // $vars['rows']. However, the template also needs to use for the rendered
+  // fields. We therefore swap the raw data out to a new variable and reset
+  // $vars['rows'] so that it can get rebuilt. Store rows so that they may be
+  // used by further preprocess functions.
   $result = $vars['result'] = $vars['rows'];
   $vars['rows'] = array();
   $vars['field_classes'] = array();
@@ -198,7 +198,6 @@ function template_preprocess_footable_view(&$vars) {
   $options = $view->style_plugin->options;
   $handler = $view->style_plugin;
 
-  $default_row_class = isset($options['default_row_class']) ? $options['default_row_class'] : TRUE;
   $row_class_special = isset($options['row_class_special']) ? $options['row_class_special'] : TRUE;
 
   $fields = &$view->field;
@@ -224,14 +223,14 @@ function template_preprocess_footable_view(&$vars) {
       $vars['data_breakpoints'][$column] = implode(' ', array_keys(array_filter($options['footable']['breakpoint'][$column])));
     }
 
-    // Create a second variable so we can easily find what fields we have and what the
-    // CSS classes should be.
+    // Create a second variable so we can easily find what fields we have and
+    // what the CSS classes should be.
     $vars['fields'][$field] = drupal_clean_css_identifier($field);
     if ($active == $field) {
       $vars['fields'][$field] .= ' active';
     }
 
-    // render the header labels
+    // Render the header labels.
     if ($field == $column && empty($fields[$field]->options['exclude'])) {
       $label = check_plain(!empty($fields[$field]) ? $fields[$field]->label() : '');
       if (empty($options['info'][$field]['sortable']) || !$fields[$field]->click_sortable()) {
@@ -271,7 +270,7 @@ function template_preprocess_footable_view(&$vars) {
         }
         $vars['header_classes'][$field] .= $class;
       }
-      // Add a CSS align class to each field if one was set
+      // Add a CSS align class to each field if one was set.
       if (!empty($options['info'][$field]['align'])) {
         $vars['header_classes'][$field] .= ' ' . drupal_clean_css_identifier($options['info'][$field]['align']);
       }
@@ -286,7 +285,7 @@ function template_preprocess_footable_view(&$vars) {
 
     }
 
-    // Add a CSS align class to each field if one was set
+    // Add a CSS align class to each field if one was set.
     if (!empty($options['info'][$field]['align'])) {
       $vars['fields'][$field] .= ' ' . drupal_clean_css_identifier($options['info'][$field]['align']);
     }
@@ -333,7 +332,8 @@ function template_preprocess_footable_view(&$vars) {
       }
     }
 
-    // Remove columns if the option is breakpoint empty column is checked and the field is not empty.
+    // Remove columns if the option is breakpoint empty column is checked and
+    // the field is not empty.
     if (!empty($options['info'][$field]['empty_column'])) {
       $empty = TRUE;
       foreach ($vars['rows'] as $num => $columns) {
@@ -401,18 +401,18 @@ function template_preprocess_footable_view(&$vars) {
   $vars['classes_array'][] = 'footable';
   $vars['footable'] = array('attributes' => array(), 'breakpoints' => '');
 
-  // Expand first row
+  // Expand first row.
   $expand_first = isset($options['footable']['expand_first']) ? $options['footable']['expand_first'] : FALSE;
   $vars['footable']['attributes']['data-expand-first'] = $expand_first ? 'true' : 'false';
 
-  // Show header
+  // Show header.
   $show_header = isset($options['footable']['show_header']) ? $options['footable']['show_header'] : TRUE;
   $vars['footable']['attributes']['data-show-header'] = $show_header ? 'true' : 'false';
 
-  // Expandable column
+  // Expandable column.
   $vars['footable']['attributes']['data-toggle-column'] = isset($options['footable']['toggle_column']) ? $options['footable']['toggle_column'] : 'first';
 
-  // Add Bootstrap configuration
+  // Add Bootstrap configuration.
   if (variable_get('footable_plugin_type', 'standalone') == 'bootstrap') {
     if (!empty($options['footable']['bootstrap']['striped'])) {
       $vars['classes_array'][] = 'table-striped';
@@ -562,8 +562,7 @@ function footable_breakpoint_load_all($default = FALSE, $status = NULL) {
  *
  * @param array $machine_names
  *   List of machines names to filter by or an empty array to load all
- *   breakpoints
- *
+ *   breakpoints.
  * @param int $status
  *   Only load enabled or disabled breakpoints.
  *
@@ -590,7 +589,7 @@ function footable_breakpoint_load_multiple($machine_names = array(), $status = N
 /**
  * Load a single FooTable breakpoint by machine name.
  *
- * @param $machine_name
+ * @param string $machine_name
  *   The breakpoint machine name.
  *
  * @return bool|object
@@ -607,7 +606,7 @@ function footable_breakpoint_load($machine_name) {
 /**
  * Save a breakpoint.
  *
- * @param $breakpoint
+ * @param object $breakpoint
  *   FooTable breakpoint object to save to the database. A new breakpoint will
  *   be created if $breakpoint->is_new is set to TRUE, otherwise the breakpoint
  *   will be updated.
@@ -625,9 +624,9 @@ function footable_breakpoint_save($breakpoint) {
 }
 
 /**
- * Delete a single breakpoint by machine_name.
+ * Delete a single breakpoint by machine name.
  *
- * @param $machine_name
+ * @param string $machine_name
  *   The breakpoint machine name.
  */
 function footable_breakpoint_delete($machine_name) {

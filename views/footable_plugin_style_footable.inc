@@ -75,7 +75,7 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       '#description' => t('Specify which column the toggle is appended to in a row.'),
     );
 
-    // Bootstrap style configuration
+    // Bootstrap style configuration.
     $form['footable']['bootstrap'] = array(
       '#type' => 'fieldset',
       '#title' => t('Bootstrap'),
@@ -108,7 +108,7 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       '#default_value' => isset($this->options['footable']['bootstrap']['condensed']) ? $this->options['footable']['bootstrap']['condensed'] : FALSE,
     );
 
-    // Breakpoint configuration
+    // Breakpoint configuration.
     $form['footable']['breakpoint'] = array(
       '#type' => 'fieldset',
       '#title' => t('Collapsed columns'),
@@ -148,4 +148,5 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       form_error($form['footable']['breakpoint'], t('You need to have atleast one column that has a breakpoint.'));
     }
   }
+
 }

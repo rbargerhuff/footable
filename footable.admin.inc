@@ -44,7 +44,7 @@ function footable_form_admin_settings($form, &$form_state) {
 }
 
 /**
- *  FooTable breakpoints configuration form.
+ * FooTable breakpoints configuration form.
  */
 function footable_form_admin_breakpoint($form, &$form_state) {
   $breakpoints = footable_breakpoint_load_multiple();
@@ -58,7 +58,7 @@ function footable_form_admin_breakpoint($form, &$form_state) {
         '#type' => 'textfield',
         '#title' => t('Name'),
         '#required' => TRUE,
-        '#default_value' => check_plain($breakpoint->name),
+        '#default_value' => $breakpoint->name,
         '#title_display' => 'invisible',
         '#size' => 25,
       ),
@@ -273,9 +273,9 @@ function theme_footable_form_admin_breakpoint($variables) {
 }
 
 /**
- * Deletes a FooTable breakpoint
+ * Deletes a FooTable breakpoint.
  *
- * @param $breakpoint
+ * @param object $breakpoint
  *   FooTable breakpoint loaded by footable_breakpoint_load().
  *
  * @see footable_form_admin_config_breakpoint_delete_submit()
@@ -309,9 +309,9 @@ function footable_form_admin_breakpoint_delete_submit($form, &$form_state) {
 }
 
 /**
- * Enables a FooTable breakpoint
+ * Enables a FooTable breakpoint.
  *
- * @param $breakpoint
+ * @param object $breakpoint
  *   FooTable breakpoint loaded by footable_breakpoint_load().
  *
  * @see footable_form_admin_breakpoint_status_enable_submit()
@@ -347,9 +347,9 @@ function footable_form_admin_breakpoint_status_enable_submit($form, &$form_state
 }
 
 /**
- * Disables a FooTable breakpoint
+ * Disables a FooTable breakpoint.
  *
- * @param $breakpoint
+ * @param object $breakpoint
  *   FooTable breakpoint loaded by footable_breakpoint_load().
  *
  * @see footable_form_admin_breakpoint_status_disable_submit()
@@ -385,9 +385,9 @@ function footable_form_admin_breakpoint_status_disable_submit($form, &$form_stat
 }
 
 /**
- * Export a FooTable breakpoint
+ * Export a FooTable breakpoint.
  *
- * @param $breakpoint
+ * @param object $breakpoint
  *   Breakpoint loaded by footable_breakpoint_load().
  */
 function footable_form_admin_breakpoint_export($form, &$form_state, $breakpoint) {

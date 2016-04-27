@@ -2,7 +2,7 @@
 
 /**
  * @file
- * FooTable views hooks
+ * FooTable views hooks.
  */
 
 /**

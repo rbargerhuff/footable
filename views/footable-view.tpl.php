@@ -15,6 +15,7 @@
  *   $rows are keyed by row number, fields within rows are keyed by field ID.
  * - $field_classes: An array of classes to apply to each field, indexed by
  *   field id, then row number. This matches the index in $rows.
+ *
  * @ingroup views_templates
  */
 ?>
