@@ -50,7 +50,7 @@ class footable_plugin_style_footable extends views_plugin_style_table {
         TRUE => t('Enabled'),
       ),
       '#default_value' => isset($this->options['footable']['expand_first']) ? $this->options['footable']['expand_first'] : FALSE,
-      '#description' => t('Whether or not to expand the first rows details..'),
+      '#description' => t('Whether or not to expand the first rows details.'),
     );
 
     $form['footable']['show_header'] = array(

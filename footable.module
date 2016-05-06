@@ -86,6 +86,18 @@ function footable_menu() {
  */
 function footable_theme($existing, $type, $theme, $path) {
   return array(
+    'footable' => array(
+      'variables' => array(
+        'header' => NULL,
+        'rows' => NULL,
+        'attributes' => NULL,
+        'caption' => NULL,
+        'breakpoints' => array(),
+        'expand_first' => FALSE,
+        'show_header' => TRUE,
+        'toggle_column' => 'first',
+      ),
+    ),
     'footable_form_admin_breakpoint' => array(
       'render element' => 'form',
       'file' => 'footable.admin.inc',
@@ -175,6 +187,143 @@ function footable_libraries_load() {
   $type = variable_get('footable_plugin_type', 'standalone');
   $compression = variable_get('footable_plugin_compression', 'minified');
   libraries_load('footable', $type . '_' . $compression);
+}
+
+/**
+ * Returns HTML for a table.
+ *
+ * @param $variables
+ *   An associative array containing:
+ *   - header: An array containing the table headers. Each element of the array
+ *     can be either a localized string or an associative array with the
+ *     following keys:
+ *     - "data": The localized title of the table column.
+ *     - "field": The database field represented in the table column (required
+ *       if user is to be able to sort on this column).
+ *     - "sort": A default sort order for this column ("asc" or "desc"). Only
+ *       one column should be given a default sort order because table sorting
+ *       only applies to one column at a time.
+ *     - "breakpoints": An array containing FooTable breakpoint machine names
+ *       at which point this column should be hidden.
+ *     - Any HTML attributes, such as "colspan", to apply to the column header
+ *       cell.
+ *   - rows: An array of table rows. Every row is an array of cells, or an
+ *     associative array with the following keys:
+ *     - "data": an array of cells
+ *     - Any HTML attributes, such as "class", to apply to the table row.
+ *     - "no_striping": a boolean indicating that the row should receive no
+ *       'even / odd' styling. Defaults to FALSE.
+ *     Each cell can be either a string or an associative array with the
+ *     following keys:
+ *     - "data": The string to display in the table cell.
+ *     - "header": Indicates this cell is a header.
+ *     - Any HTML attributes, such as "colspan", to apply to the table cell.
+ *     Here's an example for $rows:
+ *     @code
+ *     $rows = array(
+ *       // Simple row
+ *       array(
+ *         'Cell 1', 'Cell 2', 'Cell 3'
+ *       ),
+ *       // Row with attributes on the row and some of its cells.
+ *       array(
+ *         'data' => array('Cell 1', array('data' => 'Cell 2', 'colspan' => 2)), 'class' => array('funky')
+ *       )
+ *     );
+ *     @endcode
+ *   - attributes: An array of HTML attributes to apply to the table tag.
+ *   - caption: A localized string to use for the <caption> tag.
+ *   - colgroups: An array of column groups. Each element of the array can be
+ *     either:
+ *     - An array of columns, each of which is an associative array of HTML
+ *       attributes applied to the COL element.
+ *     - An array of attributes applied to the COLGROUP element, which must
+ *       include a "data" attribute. To add attributes to COL elements, set the
+ *       "data" attribute with an array of columns, each of which is an
+ *       associative array of HTML attributes.
+ *     Here's an example for $colgroup:
+ *     @code
+ *     $colgroup = array(
+ *       // COLGROUP with one COL element.
+ *       array(
+ *         array(
+ *           'class' => array('funky'), // Attribute for the COL element.
+ *         ),
+ *       ),
+ *       // Colgroup with attributes and inner COL elements.
+ *       array(
+ *         'data' => array(
+ *           array(
+ *             'class' => array('funky'), // Attribute for the COL element.
+ *           ),
+ *         ),
+ *         'class' => array('jazzy'), // Attribute for the COLGROUP element.
+ *       ),
+ *     );
+ *     @endcode
+ *     These optional tags are used to group and set properties on columns
+ *     within a table. For example, one may easily group three columns and
+ *     apply same background style to all.
+ *   - sticky: Use a "sticky" table header.
+ *   - empty: The message to display in an extra row if table does not have any
+ *     rows.
+ *   - breakpoints: A keyed array of breakpoints. Each key represents the name
+ *     of a breakpoint, used the the column headers. The values are integers
+ *     containing the breakpoint in pixels. If this value is left empty, all
+ *     enabled FooTable breakpoints will be used.
+ *   - expand_first: Whether or not to expand the first rows details.
+ *   - show_header: Whether or not to display a header row in the table.
+ *   - toggle_column: Specify which column the toggle is appended to in a row
+ *     ("first" or "last").
+ *
+ * @return string
+ *   An HTML string representing the FooTable table.
+ *
+ * @see theme_table()
+ */
+function theme_footable($variables) {
+  // Add FooTable class
+  if (empty($variables['attributes']['class']) || !in_array('footable', $variables['attributes']['class'])) {
+    $variables['attributes']['class'][] = 'footable';
+  }
+
+  // Breakpoints
+  if (empty($variables['breakpoints'])) {
+    $variables['breakpoints'] = array();
+    foreach (footable_breakpoint_load_multiple(array(), FOOTABLE_BREAKPOINT_ENABLED) as $breakpoint) {
+      $variables['breakpoints'][$breakpoint->machine_name] = (int) $breakpoint->breakpoint;
+    }
+  }
+  $variables['attributes']['data-breakpoints'] = drupal_json_encode($variables['breakpoints']);
+
+  // Expand first row.
+  $variables['attributes']['data-expand-first'] = $variables['expand_first'] ? 'true' : 'false';
+
+  // Show header.
+  $variables['attributes']['data-show-header'] = $variables['show_header'] ? 'true' : 'false';
+
+  // Expandable column.
+  $variables['attributes']['data-toggle-column'] = $variables['toggle_column'];
+
+  foreach ($variables['header'] as &$cell) {
+    if (!is_array($cell)) {
+      $cell = array('data' => $cell);
+    }
+
+    // Add datatype
+    if (empty($cell['data-type'])) {
+      $cell['data-type'] = 'html';
+    }
+
+    // Add breakpoints
+    if (!empty($cell['breakpoints']) && empty($cell['data-breakpoints'])) {
+      $cell['data-breakpoints'] = implode(' ', $cell['breakpoints']);
+    }
+  }
+
+  footable_libraries_load();
+  drupal_add_js(drupal_get_path('module', 'footable') . '/footable.js');
+  return theme('table', $variables);
 }
 
 /**
@@ -286,7 +435,6 @@ function template_preprocess_footable_view(&$vars) {
           $vars['header'][$field] = '<' . $element_label_type . '>' . $vars['header'][$field] . '</' . $element_label_type . '>';
         }
       }
-
     }
 
     // Add a CSS align class to each field if one was set.
@@ -531,7 +679,6 @@ function footable_breakpoint_sort($a, $b) {
  *
  * @param bool $default
  *   Include the default FooTable breakpoints (All / Default).
- *
  * @param int $status
  *   Only load enabled or disabled breakpoints.
  *
