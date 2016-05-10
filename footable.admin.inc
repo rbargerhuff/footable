@@ -40,6 +40,20 @@ function footable_form_admin_settings($form, &$form_state) {
     '#default_value' => variable_get('footable_plugin_compression', 'minified'),
   );
 
+  $form['config']['advanced'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Advanced'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['config']['advanced']['footable_breakpoint_load_default'] = array(
+    '#type' => 'checkbox',
+    '#title' => t("Load the module's default breakpoints"),
+    '#description' => t("Control whether the module's default breakpoints are used. This will not affect breakpoints exported via Features."),
+    '#default_value' => variable_get('footable_breakpoint_load_default', TRUE),
+  );
+
   return system_settings_form($form);
 }
 

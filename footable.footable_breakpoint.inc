@@ -6,6 +6,11 @@
 function footable_default_footable_breakpoint() {
   $breakpoints = array();
 
+  // Optionally skip loading the defaults.
+  if (!variable_get('footable_breakpoint_load_default', TRUE)) {
+    return $breakpoints;
+  }
+
   $breakpoint = new stdClass;
   $breakpoint->api_version = 1;
   $breakpoint->name = 'Extra small devices';

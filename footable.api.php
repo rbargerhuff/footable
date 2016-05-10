@@ -36,9 +36,9 @@ function hook_footable_breakpoint_load_alter(&$breakpoints) {
  *
  * This hook allows modules to provide their own FooTable breakpoints.
  *
- * This hook should be placed in MODULENAME.footable_breakpoint.inc and it will be auto-
- * loaded. MODULENAME.footable_breakpoint.inc *must* be in the same directory
- * as the .module file which *must* also contain an implementation of
+ * This hook should be placed in MODULENAME.footable_breakpoint.inc and it will
+ * be auto-loaded. MODULENAME.footable_breakpoint.inc *must* be in the same
+ * directory as the .module file which *must* also contain an implementation of
  * hook_ctools_plugin_api, preferably with the same code as found in
  * footable_ctools_plugin_api().
  *
