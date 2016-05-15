@@ -27,18 +27,19 @@ REQUIREMENTS
 
 This module requires the following modules:
 
+ * Chaos tool suite (ctools) (https://drupal.org/project/ctools)
  * Views (https://drupal.org/project/views)
- * Libraries (https://drupal.org/project/libraries)
+ * Libraries API (https://drupal.org/project/libraries)
 
-This modules also requires atleast jQuery version 1.7 which requires either one
-of the following modules:
+The FooTable plugin also requires atleast jQuery version 1.7 which requires
+either one of the following modules:
 
  * jQuery Update (https://drupal.org/project/jquery_update)
  * jQuery Multi (https://drupal.org/project/jqmulti)
 
 If you're using the standalone version of the FooTable plugin, which can be
 configured via Configuration » User interface » FooTable » Settings, you need
-to include the fontawesome (https://fortawesome.github.io/Font-Awesome)font in
+to include the Font Awesome (https://fortawesome.github.io/Font-Awesome)font in
 your project. The easiest way to do this is by installing the following module:
 
  * Font Awesome Icons (https://www.drupal.org/project/fontawesome)
@@ -52,7 +53,7 @@ INSTALLATION
    further information.
 
  * Plugin: Download the most recent 3.x.x version of the FooTable jQuery plugin
-   from https://github.com/fooplugins/FooTable/blob/V3/releases/footable-bootstrap.latest.zip
+   from https://github.com/fooplugins/FooTable/blob/V3/releases/footable-bootstrap.latest.zip?raw=true
    and move the contents of the compiled directory into the sites/all/libraries/footable
    directory.
 
