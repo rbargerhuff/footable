@@ -53,8 +53,8 @@ INSTALLATION
    further information.
 
  * Plugin: Download the most recent 3.x.x version of the FooTable jQuery plugin
-   from https://github.com/fooplugins/FooTable/blob/V3/releases/footable-bootstrap.latest.zip?raw=true
-   and move the contents of the compiled directory into the sites/all/libraries/footable
+   from https://github.com/fooplugins/FooTable/archive/V3.zip and move the
+   contents of the compiled directory into the sites/all/libraries/footable
    directory.
 
  * jQuery: Download jQuery Update or jQuery Multi and Install as you would
