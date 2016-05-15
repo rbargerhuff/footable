@@ -59,15 +59,20 @@ function footable_form_admin_settings($form, &$form_state) {
 
 /**
  * FooTable breakpoints configuration form.
+ *
+ * TODO: Move this form, and all the sub forms to the Ctools export UI.
  */
 function footable_form_admin_breakpoint($form, &$form_state) {
   $breakpoints = footable_breakpoint_load_multiple();
   $form['#tree'] = TRUE;
   $form['#breakpoints'] = array_keys($breakpoints);
+  $form['#attached']['css'][] = drupal_get_path('module', 'ctools') . '/css/export-ui-list.css';
 
-  $default = array_keys(module_invoke('footable', 'default_footable_breakpoint'));
   foreach ($breakpoints as $breakpoint) {
+    $status = footable_breakpoint_is_enabled($breakpoint);
+
     $form['footable_breakpoint'][$breakpoint->machine_name] = array(
+      '#status' => $status,
       'name' => array(
         '#type' => 'textfield',
         '#title' => t('Name'),
@@ -75,6 +80,7 @@ function footable_form_admin_breakpoint($form, &$form_state) {
         '#default_value' => $breakpoint->name,
         '#title_display' => 'invisible',
         '#size' => 25,
+        '#disabled' => !$status,
       ),
       'machine_name' => array(
         '#markup' => $breakpoint->machine_name,
@@ -88,9 +94,10 @@ function footable_form_admin_breakpoint($form, &$form_state) {
         '#field_suffix' => 'px',
         '#title_display' => 'invisible',
         '#size' => 25,
+        '#disabled' => !$status,
       ),
       'status' => array(
-        '#markup' => empty($breakpoint->status) ? t('Disabled') : t('Enabled'),
+        '#markup' => !$status ? t('Disabled') : t('Enabled'),
       ),
       'statustoggle' => array(
         '#type' => 'link',
@@ -101,7 +108,7 @@ function footable_form_admin_breakpoint($form, &$form_state) {
         '#type' => 'link',
         '#title' => t('Delete'),
         '#href' => 'admin/config/user-interface/footable/breakpoint/' . $breakpoint->machine_name . '/delete',
-        '#access' => !in_array($breakpoint->machine_name, $default),
+        '#access' => $breakpoint->type == t('Normal'),
       ),
       'export' => array(
         '#type' => 'link',
@@ -191,6 +198,9 @@ function footable_form_admin_breakpoint_validate($form, &$form_state) {
     if (!$new['machine_name']) {
       form_set_error('footable_breakpoint][new][machine_name', t('You need to provide a machine name.'));
     }
+    if (!$new['breakpoint']) {
+      form_set_error('footable_breakpoint][new][breakpoint', t('You need to provide a breakpoint.'));
+    }
   }
 }
 
@@ -257,6 +267,7 @@ function theme_footable_form_admin_breakpoint($variables) {
   $rows = array();
   foreach (element_children($form['footable_breakpoint']) as $key) {
     $form['footable_breakpoint'][$key]['weight']['#attributes']['class'][] = 'footable-breakpoint-weight';
+    $class = $key != 'new' && empty($form['footable_breakpoint'][$key]['#status']) ? 'ctools-export-ui-disabled' : 'ctools-export-ui-enabled';
 
     $rows[] = array(
       'data' => array(
@@ -269,7 +280,7 @@ function theme_footable_form_admin_breakpoint($variables) {
         drupal_render($form['footable_breakpoint'][$key]['delete']),
         drupal_render($form['footable_breakpoint'][$key]['export']),
       ),
-      'class' => array('draggable'),
+      'class' => array($class, 'draggable'),
     );
   }
 
@@ -413,4 +424,74 @@ function footable_form_admin_breakpoint_export($form, &$form_state, $breakpoint)
     '#default_value' => ctools_export_object('footable_breakpoint', $breakpoint),
   );
   return $form;
+}
+
+/**
+ * Import a FooTable breakpoint.
+ */
+function footable_form_admin_breakpoint_import($form, &$form_state) {
+  $form['import'] = array(
+    '#type' => 'textarea',
+    '#title' => t('FooTable breakpoint'),
+    '#rows' => 20,
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Import')
+  );
+  return $form;
+}
+
+/**
+ * Form validation handler for footable_form_admin_breakpoint_import().
+ */
+function footable_form_admin_breakpoint_import_validate($form, &$form_state) {
+  ctools_include('export');
+  $breakpoint = ctools_export_crud_import('footable_breakpoint', $form_state['values']['import']);
+  if (is_array($breakpoint) || is_object($breakpoint)) {
+    $breakpoint = (object) $breakpoint;
+
+    // We can't allow the user to use the FooTable reserved machine names.
+    if (!empty($breakpoint->machine_name)) {
+      $reserved = array('all', 'default');
+      if (in_array($breakpoint->machine_name, $reserved)) {
+        form_set_error('import', t('The chosen machine name is reserved by the FooTable plugin.'));
+      }
+
+      if (footable_breakpoint_load($breakpoint->machine_name)) {
+        form_set_error('import', t('A FooTable breakpoint with machine name %name already exists', array('%name' => $breakpoint->machine_name)));
+      }
+    }
+
+    if (empty($breakpoint->name)) {
+      form_set_error('import', t('The FooTable breakpoint needs to contain a name.'));
+    }
+    if (empty(!$breakpoint->machine_name)) {
+      form_set_error('import', t('The FooTable breakpoint needs to contain a machine name.'));
+    }
+    if (empty($breakpoint->breakpoint)) {
+      form_set_error('import', t('The FooTable breakpoint needs to contain a breakpoint.'));
+    }
+  }
+}
+
+/**
+ * Form submission handler for footable_form_admin_breakpoint_import().
+ */
+function footable_form_admin_breakpoint_import_submit($form, &$form_state) {
+  ctools_include('export');
+  $breakpoint = ctools_export_crud_import('footable_breakpoint', $form_state['values']['import']);
+  if (is_array($breakpoint) || is_object($breakpoint)) {
+    $breakpoint = (object) $breakpoint;
+    $breakpoint->is_new = TRUE;
+
+    if (!empty($breakpoint->disabled)) {
+      $breakpoint->status = FALSE;
+    }
+
+    if (footable_breakpoint_save($breakpoint)) {
+      drupal_set_message(t('Breakpoint %breakpoint imported.', array('%breakpoint' => $breakpoint->name)));
+      $form_state['redirect'] = 'admin/config/user-interface/footable';
+    }
+  }
 }

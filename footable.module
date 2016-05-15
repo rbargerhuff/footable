@@ -37,6 +37,14 @@ function footable_menu() {
     'title' => 'Breakpoints',
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
+  $items['admin/config/user-interface/footable/breakpoint/import'] = array(
+    'title' => 'Import',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('footable_form_admin_breakpoint_import'),
+    'access arguments' => array('administer footable'),
+    'file' => 'footable.admin.inc',
+    'type' => MENU_LOCAL_ACTION,
+  );
   $items['admin/config/user-interface/footable/breakpoint/%footable_breakpoint/delete'] = array(
     'title' => 'Delete breakpoint',
     'page callback' => 'drupal_get_form',
@@ -616,6 +624,10 @@ function footable_breakpoint_max_weight() {
   return $weight ? $weight : 0;
 }
 
+function footable_breakpoint_is_enabled($breakpoint) {
+  return !empty($breakpoint->status);
+}
+
 /**
  * Sort footable breakpoint by weight.
  */
@@ -722,6 +734,10 @@ function footable_breakpoint_load($machine_name) {
  *   returns SAVED_NEW or SAVED_UPDATED, depending on the operation performed.
  */
 function footable_breakpoint_save($breakpoint) {
+  if (!isset($breakpoint->is_new)) {
+    $breakpoint->is_new = empty($breakpoint->id);
+  }
+
   $update = !empty($breakpoint->is_new) || !empty($breakpoint->in_code_only) ? array() : 'machine_name';
   $result = drupal_write_record('footable_breakpoint', $breakpoint, $update);
   ctools_include('export');
