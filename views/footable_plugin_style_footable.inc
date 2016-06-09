@@ -6,24 +6,29 @@
  */
 
 /**
- * Style plugin to render each item as a row in a responsive table.
+ * Style plugin to render a FooTable.
  *
  * @ingroup views_style_plugins
  */
 class footable_plugin_style_footable extends views_plugin_style_table {
+
   /**
-   * Provide default options.
+   * @inheritdoc
    */
   function option_definition() {
     $options = parent::option_definition();
-
-    $options['footable'] = array('default' => array());
-
+    $options['footable']['expand_first'] = array('default' => FALSE);
+    $options['footable']['show_header'] = array('default' => TRUE);
+    $options['footable']['toggle_column'] = array('default' => 'first');
+    $options['footable']['bootstrap']['striped'] = array('default' => FALSE);
+    $options['footable']['bootstrap']['bordered'] = array('default' => FALSE);
+    $options['footable']['bootstrap']['hover'] = array('default' => FALSE);
+    $options['footable']['bootstrap']['condensed'] = array('default' => FALSE);
     return $options;
   }
 
   /**
-   * Adds FooTable configuration form options.
+   * @inheritdoc
    */
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
@@ -38,83 +43,84 @@ class footable_plugin_style_footable extends views_plugin_style_table {
     $form['footable'] = array(
       '#type' => 'fieldset',
       '#title' => t('FooTable settings'),
-      '#collapsible' => FALSE,
+      '#collapsible' => TRUE,
       '#collapsed' => FALSE,
     );
 
     $form['footable']['expand_first'] = array(
-      '#title' => t('Expand first row'),
       '#type' => 'select',
+      '#title' => t('Expand first row'),
+      '#description' => t('Whether or not to expand the first rows details.'),
       '#options' => array(
         FALSE => t('Disabled'),
         TRUE => t('Enabled'),
       ),
-      '#default_value' => isset($this->options['footable']['expand_first']) ? $this->options['footable']['expand_first'] : FALSE,
-      '#description' => t('Whether or not to expand the first rows details.'),
+      '#default_value' => $this->options['footable']['expand_first'],
     );
 
     $form['footable']['show_header'] = array(
-      '#title' => t('Show header'),
       '#type' => 'select',
+      '#title' => t('Show header'),
+      '#description' => t('Whether or not to display a header row in the table.'),
       '#options' => array(
         TRUE => t('Yes'),
         FALSE => t('No'),
       ),
-      '#default_value' => isset($this->options['footable']['show_header']) ? $this->options['footable']['show_header'] : TRUE,
-      '#description' => t('Whether or not to display a header row in the table.'),
+      '#default_value' => $this->options['footable']['show_header'],
     );
 
     $form['footable']['toggle_column'] = array(
-      '#title' => t('Expandable column'),
       '#type' => 'select',
+      '#title' => t('Expandable column'),
+      '#description' => t('Specify which column the toggle is appended to in a row.'),
       '#options' => array(
         'first' => t('First'),
         'last' => t('Last'),
       ),
-      '#default_value' => isset($this->options['footable']['toggle_column']) ? $this->options['footable']['toggle_column'] : 'first',
-      '#description' => t('Specify which column the toggle is appended to in a row.'),
+      '#default_value' => $this->options['footable']['toggle_column'],
     );
 
     // Bootstrap style configuration.
-    $form['footable']['bootstrap'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Bootstrap'),
-      '#collapsible' => FALSE,
-      '#collapsed' => FALSE,
-      '#access' => variable_get('footable_plugin_type', 'standalone') == 'bootstrap',
-    );
+    if (variable_get('footable_plugin_type', 'standalone') == 'bootstrap') {
+      $form['footable']['bootstrap'] = array(
+        '#type' => 'fieldset',
+        '#title' => t('Bootstrap'),
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE,
+      );
 
-    $form['footable']['bootstrap']['striped'] = array(
-      '#title' => t('Striped'),
-      '#type' => 'checkbox',
-      '#default_value' => isset($this->options['footable']['bootstrap']['striped']) ? $this->options['footable']['bootstrap']['striped'] : FALSE,
-    );
+      $form['footable']['bootstrap']['striped'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Striped'),
+        '#default_value' => $this->options['footable']['bootstrap']['striped'],
+      );
 
-    $form['footable']['bootstrap']['bordered'] = array(
-      '#title' => t('Bordered'),
-      '#type' => 'checkbox',
-      '#default_value' => isset($this->options['footable']['bootstrap']['bordered']) ? $this->options['footable']['bootstrap']['bordered'] : FALSE,
-    );
+      $form['footable']['bootstrap']['bordered'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Bordered'),
+        '#default_value' => $this->options['footable']['bootstrap']['bordered'],
+      );
 
-    $form['footable']['bootstrap']['hover'] = array(
-      '#title' => t('Hover'),
-      '#type' => 'checkbox',
-      '#default_value' => isset($this->options['footable']['bootstrap']['hover']) ? $this->options['footable']['bootstrap']['hover'] : FALSE,
-    );
+      $form['footable']['bootstrap']['hover'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Hover'),
+        '#default_value' => $this->options['footable']['bootstrap']['hover'],
+      );
 
-    $form['footable']['bootstrap']['condensed'] = array(
-      '#title' => t('Condensed'),
-      '#type' => 'checkbox',
-      '#default_value' => isset($this->options['footable']['bootstrap']['condensed']) ? $this->options['footable']['bootstrap']['condensed'] : FALSE,
-    );
+      $form['footable']['bootstrap']['condensed'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Condensed'),
+        '#default_value' => $this->options['footable']['bootstrap']['condensed'],
+      );
+    }
 
     // Breakpoint configuration.
     $form['footable']['breakpoint'] = array(
       '#type' => 'fieldset',
       '#title' => t('Collapsed columns'),
-      '#collapsible' => FALSE,
-      '#collapsed' => FALSE,
       '#description' => t('Select the "breakpoints" where a particular column should be hidden.'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
     );
 
     $breakpoints = array();
@@ -133,6 +139,9 @@ class footable_plugin_style_footable extends views_plugin_style_table {
     }
   }
 
+  /**
+   * @inheritdoc
+   */
   function options_validate(&$form, &$form_state) {
     $breakpoints = FALSE;
     if (!empty($form_state['values']['style_options']['footable']['breakpoint'])) {
@@ -148,5 +157,4 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       form_error($form['footable']['breakpoint'], t('You need to have atleast one column that has a breakpoint.'));
     }
   }
-
 }
