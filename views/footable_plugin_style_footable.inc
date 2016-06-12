@@ -119,12 +119,12 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       '#type' => 'fieldset',
       '#title' => t('Collapsed columns'),
       '#description' => t('Select the "breakpoints" where a particular column should be hidden.'),
-      '#collapsible' => TRUE,
+      '#collapsible' => FALSE,
       '#collapsed' => FALSE,
     );
 
     $breakpoints = array();
-    foreach (footable_breakpoint_load_all(TRUE, FOOTABLE_BREAKPOINT_ENABLED) as $breakpoint) {
+    foreach (footable_breakpoint_load_all(TRUE) as $breakpoint) {
       $breakpoints[$breakpoint->machine_name] = check_plain($breakpoint->name);
     }
 
@@ -133,7 +133,7 @@ class footable_plugin_style_footable extends views_plugin_style_table {
         '#title' => check_plain($label),
         '#type' => 'checkboxes',
         '#options' => $breakpoints,
-        '#default_value' => isset($this->options['footable']['breakpoint'][$name]) ? $this->options['footable']['breakpoint'][$name] : NULL,
+        '#default_value' => isset($this->options['footable']['breakpoint'][$name]) ? $this->options['footable']['breakpoint'][$name] : array(),
         '#multiple' => TRUE,
       );
     }

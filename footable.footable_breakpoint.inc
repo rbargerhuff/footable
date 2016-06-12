@@ -4,48 +4,44 @@
  * Implements hook_default_footable_breakpoint().
  */
 function footable_default_footable_breakpoint() {
-  $breakpoints = array();
+  $footable_breakpoints = array();
 
   // Optionally skip loading the defaults.
   if (!variable_get('footable_breakpoint_load_default', TRUE)) {
-    return $breakpoints;
+    return $footable_breakpoints;
   }
 
-  $breakpoint = new stdClass;
-  $breakpoint->api_version = 1;
-  $breakpoint->name = 'Extra small devices';
-  $breakpoint->machine_name = 'xs';
-  $breakpoint->breakpoint = 480;
-  $breakpoint->status = TRUE;
-  $breakpoint->weight = 0;
-  $breakpoints[$breakpoint->machine_name] = $breakpoint;
+  $footable_breakpoint = new stdClass;
+  $footable_breakpoint->disabled = FALSE;
+  $footable_breakpoint->api_version = 1;
+  $footable_breakpoint->name = 'Extra small devices';
+  $footable_breakpoint->machine_name = 'xs';
+  $footable_breakpoint->breakpoint = 480;
+  $footable_breakpoint[$footable_breakpoint->machine_name] = $footable_breakpoint;
 
-  $breakpoint = new stdClass;
-  $breakpoint->api_version = 1;
-  $breakpoint->name = 'Small devices';
-  $breakpoint->machine_name = 'sm';
-  $breakpoint->breakpoint = 768;
-  $breakpoint->status = TRUE;
-  $breakpoint->weight = 1;
-  $breakpoints[$breakpoint->machine_name] = $breakpoint;
+  $footable_breakpoint = new stdClass;
+  $footable_breakpoint->disabled = FALSE;
+  $footable_breakpoint->api_version = 1;
+  $footable_breakpoint->name = 'Small devices';
+  $footable_breakpoint->machine_name = 'sm';
+  $footable_breakpoint->breakpoint = 768;
+  $footable_breakpoints[$footable_breakpoint->machine_name] = $footable_breakpoint;
 
-  $breakpoint = new stdClass;
-  $breakpoint->api_version = 1;
-  $breakpoint->name = 'Medium devices';
-  $breakpoint->machine_name = 'md';
-  $breakpoint->breakpoint = 992;
-  $breakpoint->status = TRUE;
-  $breakpoint->weight = 2;
-  $breakpoints[$breakpoint->machine_name] = $breakpoint;
+  $footable_breakpoint = new stdClass;
+  $footable_breakpoint->disabled = FALSE;
+  $footable_breakpoint->api_version = 1;
+  $footable_breakpoint->name = 'Medium devices';
+  $footable_breakpoint->machine_name = 'md';
+  $footable_breakpoint->breakpoint = 992;
+  $footable_breakpoints[$footable_breakpoint->machine_name] = $footable_breakpoint;
 
-  $breakpoint = new stdClass;
-  $breakpoint->api_version = 1;
-  $breakpoint->name = 'Large devices';
-  $breakpoint->machine_name = 'lg';
-  $breakpoint->breakpoint = 1200;
-  $breakpoint->status = TRUE;
-  $breakpoint->weight = 3;
-  $breakpoints[$breakpoint->machine_name] = $breakpoint;
+  $footable_breakpoint = new stdClass;
+  $footable_breakpoint->disabled = FALSE;
+  $footable_breakpoint->api_version = 1;
+  $footable_breakpoint->name = 'Large devices';
+  $footable_breakpoint->machine_name = 'lg';
+  $footable_breakpoint->breakpoint = 1200;
+  $footable_breakpoints[$footable_breakpoint->machine_name] = $footable_breakpoint;
 
-  return $breakpoints;
+  return $footable_breakpoints;
 }

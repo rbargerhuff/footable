@@ -7,8 +7,6 @@
 
 define('FOOTABLE_PLUGIN_PATH', 'sites/all/libraries/footable');
 define('FOOTABLE_PLUGIN_VERSION_MIN', '3.0.6');
-define('FOOTABLE_BREAKPOINT_ENABLED', 1);
-define('FOOTABLE_BREAKPOINT_DISABLED', 0);
 
 /**
  * Implements hook_permission().
@@ -25,58 +23,6 @@ function footable_permission() {
  * Implements hook_menu().
  */
 function footable_menu() {
-  $items['admin/config/user-interface/footable'] = array(
-    'title' => 'FooTable',
-    'description' => 'Configure FooTable breakpoints.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('footable_form_admin_breakpoint'),
-    'access arguments' => array('administer footable'),
-    'file' => 'footable.admin.inc',
-  );
-  $items['admin/config/user-interface/footable/breakpoint'] = array(
-    'title' => 'Breakpoints',
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-  );
-  $items['admin/config/user-interface/footable/breakpoint/import'] = array(
-    'title' => 'Import',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('footable_form_admin_breakpoint_import'),
-    'access arguments' => array('administer footable'),
-    'file' => 'footable.admin.inc',
-    'type' => MENU_LOCAL_ACTION,
-  );
-  $items['admin/config/user-interface/footable/breakpoint/%footable_breakpoint/delete'] = array(
-    'title' => 'Delete breakpoint',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('footable_form_admin_breakpoint_delete', 5),
-    'access arguments' => array('administer footable'),
-    'file' => 'footable.admin.inc',
-    'type' => MENU_CALLBACK,
-  );
-  $items['admin/config/user-interface/footable/breakpoint/%footable_breakpoint/enable'] = array(
-    'title' => 'Enable breakpoint',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('footable_form_admin_breakpoint_status_enable', 5),
-    'access arguments' => array('administer footable'),
-    'file' => 'footable.admin.inc',
-    'type' => MENU_CALLBACK,
-  );
-  $items['admin/config/user-interface/footable/breakpoint/%footable_breakpoint/disable'] = array(
-    'title' => 'Disable breakpoint',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('footable_form_admin_breakpoint_status_disable', 5),
-    'access arguments' => array('administer footable'),
-    'file' => 'footable.admin.inc',
-    'type' => MENU_CALLBACK,
-  );
-  $items['admin/config/user-interface/footable/breakpoint/%footable_breakpoint/export'] = array(
-    'title' => 'Export breakpoint',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('footable_form_admin_breakpoint_export', 5),
-    'access arguments' => array('administer footable'),
-    'file' => 'footable.admin.inc',
-    'type' => MENU_CALLBACK,
-  );
   $items['admin/config/user-interface/footable/settings'] = array(
     'title' => 'Settings',
     'description' => 'Configure FooTable settings.',
@@ -106,11 +52,25 @@ function footable_theme($existing, $type, $theme, $path) {
         'toggle_column' => 'first',
       ),
     ),
-    'footable_form_admin_breakpoint' => array(
-      'render element' => 'form',
-      'file' => 'footable.admin.inc',
-    ),
   );
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function footable_ctools_plugin_api($module, $api) {
+  if ($module == 'footable' && $api == 'footable_breakpoint') {
+    return array('version' => 1);
+  }
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function footable_ctools_plugin_directory($owner, $plugin_type) {
+  if ($plugin_type == 'export_ui') {
+    return 'plugins/export_ui';
+  }
 }
 
 /**
@@ -227,7 +187,7 @@ function footable_libraries_load() {
  *     - "header": Indicates this cell is a header.
  *     - Any HTML attributes, such as "colspan", to apply to the table cell.
  *     Here's an example for $rows:
- *     @code
+ * @code
  *     $rows = array(
  *       // Simple row
  *       array(
@@ -238,7 +198,7 @@ function footable_libraries_load() {
  *         'data' => array('Cell 1', array('data' => 'Cell 2', 'colspan' => 2)), 'class' => array('funky')
  *       )
  *     );
- *     @endcode
+ * @endcode
  *   - attributes: An array of HTML attributes to apply to the table tag.
  *   - caption: A localized string to use for the <caption> tag.
  *   - colgroups: An array of column groups. Each element of the array can be
@@ -250,7 +210,7 @@ function footable_libraries_load() {
  *       "data" attribute with an array of columns, each of which is an
  *       associative array of HTML attributes.
  *     Here's an example for $colgroup:
- *     @code
+ * @code
  *     $colgroup = array(
  *       // COLGROUP with one COL element.
  *       array(
@@ -268,7 +228,7 @@ function footable_libraries_load() {
  *         'class' => array('jazzy'), // Attribute for the COLGROUP element.
  *       ),
  *     );
- *     @endcode
+ * @endcode
  *     These optional tags are used to group and set properties on columns
  *     within a table. For example, one may easily group three columns and
  *     apply same background style to all.
@@ -298,7 +258,7 @@ function theme_footable($variables) {
   // Breakpoints
   if (empty($variables['breakpoints'])) {
     $variables['breakpoints'] = array();
-    foreach (footable_breakpoint_load_multiple(array(), FOOTABLE_BREAKPOINT_ENABLED) as $breakpoint) {
+    foreach (footable_breakpoint_load_multiple() as $breakpoint) {
       $variables['breakpoints'][$breakpoint->machine_name] = (int) $breakpoint->breakpoint;
     }
   }
@@ -592,7 +552,7 @@ function template_preprocess_footable_view(&$vars) {
   }
 
   $breakpoints = array();
-  foreach (footable_breakpoint_load_multiple(array(), FOOTABLE_BREAKPOINT_ENABLED) as $breakpoint) {
+  foreach (footable_breakpoint_load_multiple() as $breakpoint) {
     $breakpoints[$breakpoint->machine_name] = (int) $breakpoint->breakpoint;
   }
   $vars['footable']['attributes']['data-breakpoints'] = drupal_json_encode($breakpoints);
@@ -603,41 +563,13 @@ function template_preprocess_footable_view(&$vars) {
 }
 
 /**
- * Implements hook_ctools_plugin_api().
- */
-function footable_ctools_plugin_api($module, $api) {
-  if ($module == 'footable' && $api == 'footable_breakpoint') {
-    return array('version' => 1);
-  }
-}
-
-/**
- * Returns the maximum weight of all the FooTable breakpoints.
- *
- * @return int
- *   Current maximum weight.
- */
-function footable_breakpoint_max_weight() {
-  $query = db_select('footable_breakpoint');
-  $query->addExpression('MAX(weight)');
-  $weight = $query->execute()->fetchField();
-  return $weight ? $weight : 0;
-}
-
-function footable_breakpoint_is_enabled($breakpoint) {
-  return !empty($breakpoint->status);
-}
-
-/**
- * Sort footable breakpoint by weight.
+ * Sort footable breakpoint by breakpoint with name asa fallback.
  */
 function footable_breakpoint_sort($a, $b) {
-  $a_weight = !empty($a->weight) ? $a->weight : 0;
-  $b_weight = !empty($b->weight) ? $b->weight : 0;
-  if ($a_weight == $b_weight) {
-    return 0;
+  if ($a->breakpoint == $b->breakpoint) {
+    return strcmp($a->name, $b->name);
   }
-  return ($a_weight < $b_weight) ? -1 : 1;
+  return ($a->breakpoint < $b->breakpoint) ? -1 : 1;
 }
 
 /**
@@ -646,27 +578,25 @@ function footable_breakpoint_sort($a, $b) {
  *
  * @param bool $default
  *   Include the default FooTable breakpoints (All / Default).
- * @param int $status
- *   Only load enabled or disabled breakpoints.
+ * @param bool $disabled
+ *   Include disabled breakpoints.
  *
  * @return array
  *   List of loaded FooTable breakpoints.
  */
-function footable_breakpoint_load_all($default = FALSE, $status = NULL) {
-  $breakpoints = footable_breakpoint_load_multiple(array(), $status);
+function footable_breakpoint_load_all($default = FALSE, $disabled = FALSE) {
+  $breakpoints = footable_breakpoint_load_multiple(array(), $disabled);
 
   if ($default) {
     $breakpoints['all'] = (object) array(
       'name' => 'All',
       'machine_name' => 'all',
       'breakpoint' => 'all',
-      'weight' => -100,
     );
     $breakpoints['default'] = (object) array(
       'name' => 'Default',
       'machine_name' => 'default',
       'breakpoint' => 'default',
-      'weight' => 100,
     );
   }
 
@@ -681,20 +611,20 @@ function footable_breakpoint_load_all($default = FALSE, $status = NULL) {
  * @param array $machine_names
  *   List of machines names to filter by or an empty array to load all
  *   breakpoints.
- * @param int $status
- *   Only load enabled or disabled breakpoints.
+ * @param bool $disabled
+ *   Include disabled breakpoints.
  *
  * @return array
  *   List of loaded FooTable breakpoints.
  */
-function footable_breakpoint_load_multiple($machine_names = array(), $status = NULL) {
+function footable_breakpoint_load_multiple($machine_names = array(), $disabled = FALSE) {
   ctools_include('export');
   $breakpoints = empty($machine_names) ? ctools_export_load_object('footable_breakpoint') : ctools_export_load_object('footable_breakpoint', 'names', $machine_names);
   drupal_alter('footable_breakpoint_load', $breakpoints);
 
-  if (isset($status)) {
+  if (!$disabled) {
     foreach ($breakpoints as $machine_name => $breakpoint) {
-      if ($breakpoint->status != $status) {
+      if (!empty($breakpoint->disabled)) {
         unset($breakpoints[$machine_name]);
       }
     }
@@ -714,7 +644,7 @@ function footable_breakpoint_load_multiple($machine_names = array(), $status = N
  *   The breakpoint configuration, or FALSE if no matching breakpoint was found.
  */
 function footable_breakpoint_load($machine_name) {
-  $breakpoints = footable_breakpoint_load_multiple(array($machine_name));
+  $breakpoints = footable_breakpoint_load_multiple(array($machine_name), TRUE);
   if (isset($breakpoints[$machine_name])) {
     return $breakpoints[$machine_name];
   }

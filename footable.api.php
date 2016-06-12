@@ -42,8 +42,8 @@ function hook_footable_breakpoint_load_alter(&$breakpoints) {
  * hook_ctools_plugin_api, preferably with the same code as found in
  * footable_ctools_plugin_api().
  *
- * The $config->status boolean attribute indicates whether the FooTable
- * instance should be enabled (TRUE) or disabled (FALSE) by default.
+ * The $config->disabled boolean attribute indicates whether the FooTable
+ * breakpoint instance should be enabled (FALSE) or disabled (TRUE) by default.
  *
  * @return array
  *   An associative array containing the structures of FooTable breakpoints, as
@@ -54,16 +54,15 @@ function hook_footable_breakpoint_load_alter(&$breakpoints) {
  * @see footable_ctools_plugin_api()
  */
 function hook_default_footable_breakpoint() {
-  $breakpoints = array();
+  $footable_breakpoints = array();
 
-  $breakpoint = new stdClass;
-  $breakpoint->api_version = 1;
-  $breakpoint->name = 'Example breakpoint';
-  $breakpoint->machine_name = 'breakpoint1';
-  $breakpoint->breakpoint = 1000;
-  $breakpoint->status = TRUE;
-  $breakpoint->weight = 0;
-  $breakpoints[$breakpoint->machine_name] = $breakpoint;
+  $footable_breakpoint = new stdClass;
+  $footable_breakpoint->disabled = FALSE;
+  $footable_breakpoint->api_version = 1;
+  $footable_breakpoint->name = 'Example breakpoint';
+  $footable_breakpoint->machine_name = 'breakpoint1';
+  $footable_breakpoint->breakpoint = 1000;
+  $footable_breakpoint[$footable_breakpoint->machine_name] = $footable_breakpoint;
 
-  return $breakpoints;
+  return $footable_breakpoints;
 }
