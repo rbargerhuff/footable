@@ -17,7 +17,7 @@ function footable_default_footable_breakpoint() {
   $footable_breakpoint->name = 'Extra small devices';
   $footable_breakpoint->machine_name = 'xs';
   $footable_breakpoint->breakpoint = 480;
-  $footable_breakpoint[$footable_breakpoint->machine_name] = $footable_breakpoint;
+  $footable_breakpoints[$footable_breakpoint->machine_name] = $footable_breakpoint;
 
   $footable_breakpoint = new stdClass;
   $footable_breakpoint->disabled = FALSE;
