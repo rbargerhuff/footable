@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Provide default FooTable Breakpoints.
+ */
+
+/**
  * Implements hook_default_footable_breakpoint().
  */
 function footable_default_footable_breakpoint() {
@@ -11,7 +16,7 @@ function footable_default_footable_breakpoint() {
     return $footable_breakpoints;
   }
 
-  $footable_breakpoint = new stdClass;
+  $footable_breakpoint = new stdClass();
   $footable_breakpoint->disabled = FALSE;
   $footable_breakpoint->api_version = 1;
   $footable_breakpoint->name = 'Extra small devices';
@@ -19,7 +24,7 @@ function footable_default_footable_breakpoint() {
   $footable_breakpoint->breakpoint = 480;
   $footable_breakpoints[$footable_breakpoint->machine_name] = $footable_breakpoint;
 
-  $footable_breakpoint = new stdClass;
+  $footable_breakpoint = new stdClass();
   $footable_breakpoint->disabled = FALSE;
   $footable_breakpoint->api_version = 1;
   $footable_breakpoint->name = 'Small devices';
@@ -27,7 +32,7 @@ function footable_default_footable_breakpoint() {
   $footable_breakpoint->breakpoint = 768;
   $footable_breakpoints[$footable_breakpoint->machine_name] = $footable_breakpoint;
 
-  $footable_breakpoint = new stdClass;
+  $footable_breakpoint = new stdClass();
   $footable_breakpoint->disabled = FALSE;
   $footable_breakpoint->api_version = 1;
   $footable_breakpoint->name = 'Medium devices';
@@ -35,7 +40,7 @@ function footable_default_footable_breakpoint() {
   $footable_breakpoint->breakpoint = 992;
   $footable_breakpoints[$footable_breakpoint->machine_name] = $footable_breakpoint;
 
-  $footable_breakpoint = new stdClass;
+  $footable_breakpoint = new stdClass();
   $footable_breakpoint->disabled = FALSE;
   $footable_breakpoint->api_version = 1;
   $footable_breakpoint->name = 'Large devices';

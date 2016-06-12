@@ -163,11 +163,12 @@ function footable_update_7200() {
 }
 
 /**
- * Add the 7-x.1.x breakpoints to provide backwards compatibility with the 7.x-1.x version.
+ * Add the 7-x.1.x breakpoints to provide backwards compatibility with the
+ * 7.x-1.x version.
  */
 function footable_update_7201() {
   if (!footable_breakpoint_load('phone')) {
-    $breakpoint = new stdClass;
+    $breakpoint = new stdClass();
     $breakpoint->disabled = FALSE;
     $breakpoint->api_version = 1;
     $breakpoint->name = 'Phone';
@@ -177,7 +178,7 @@ function footable_update_7201() {
   }
 
   if (!footable_breakpoint_load('tablet')) {
-    $breakpoint = new stdClass;
+    $breakpoint = new stdClass();
     $breakpoint->disabled = FALSE;
     $breakpoint->api_version = 1;
     $breakpoint->name = 'Tablet';

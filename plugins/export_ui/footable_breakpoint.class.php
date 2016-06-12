@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Provide FooTable breakpoint Ctools export ui integration.
+ */
+
 class footable_breakpoint extends ctools_export_ui {
 
   /**
@@ -74,4 +79,5 @@ class footable_breakpoint extends ctools_export_ui {
       'class' => array(!empty($item->disabled) ? 'ctools-export-ui-disabled' : 'ctools-export-ui-enabled'),
     );
   }
+
 }

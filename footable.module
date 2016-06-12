@@ -160,7 +160,7 @@ function footable_libraries_load() {
 /**
  * Returns HTML for a table.
  *
- * @param $variables
+ * @param array $variables
  *   An associative array containing:
  *   - header: An array containing the table headers. Each element of the array
  *     can be either a localized string or an associative array with the
@@ -187,6 +187,7 @@ function footable_libraries_load() {
  *     - "header": Indicates this cell is a header.
  *     - Any HTML attributes, such as "colspan", to apply to the table cell.
  *     Here's an example for $rows:
+ *
  * @code
  *     $rows = array(
  *       // Simple row
@@ -278,12 +279,12 @@ function theme_footable($variables) {
       $cell = array('data' => $cell);
     }
 
-    // Add datatype
+    // Add datatype.
     if (empty($cell['data-type'])) {
       $cell['data-type'] = 'html';
     }
 
-    // Add breakpoints
+    // Add breakpoints.
     if (!empty($cell['breakpoints']) && empty($cell['data-breakpoints'])) {
       $cell['data-breakpoints'] = implode(' ', $cell['breakpoints']);
     }
@@ -412,7 +413,7 @@ function template_preprocess_footable_view(&$vars) {
 
     // Render each field into its appropriate column.
     foreach ($result as $num => $row) {
-      // Add field classes
+      // Add field classes.
       $vars['field_classes'][$field][$num] = '';
       if ($fields[$field]->options['element_default_classes']) {
         $vars['field_classes'][$field][$num] = "views-field views-field-" . $vars['fields'][$field];
@@ -496,7 +497,6 @@ function template_preprocess_footable_view(&$vars) {
     $vars['field_attributes'][0][0]['colspan'] = count($vars['header']);
     $vars['field_classes'][0][0] = 'views-empty';
   }
-
 
   if (!empty($options['sticky'])) {
     drupal_add_js('misc/tableheader.js');
