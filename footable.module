@@ -333,6 +333,11 @@ function template_preprocess_footable_view(&$vars) {
   // everything.
   $renders = $handler->render_fields($result);
 
+  // Provide backwards compatibility with 7.x-1.x.
+  if (!empty($options['footable']['hide']) && empty($options['footable']['breakpoint'])) {
+    $options['footable']['breakpoint'] = $options['footable']['hide'];
+  }
+
   foreach ($columns as $field => $column) {
     $vars['column_attributes'][$column] = array(
       'data-type' => 'html',
