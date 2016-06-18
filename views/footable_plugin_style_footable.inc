@@ -359,6 +359,8 @@ class footable_plugin_style_footable extends views_plugin_style_table {
    * {@inheritdoc}
    */
   function options_validate(&$form, &$form_state) {
+    parent::options_validate($form, $form_state);
+
     $breakpoints = FALSE;
     if (!empty($form_state['values']['style_options']['footable']['breakpoint'])) {
       foreach ($form_state['values']['style_options']['footable']['breakpoint'] as $breakpoint) {
