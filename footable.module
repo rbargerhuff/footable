@@ -336,6 +336,9 @@ function template_preprocess_footable_view(&$vars) {
 
     // Add breakpoints.
     if (!empty($options['footable']['breakpoint'][$column])) {
+      if (!empty($options['footable']['breakpoint'][$column]['all'])) {
+        $options['footable']['breakpoint'][$column] = array('all' => 'all');
+      }
       $vars['column_attributes'][$column]['data-breakpoints'] = implode(' ', array_keys(array_filter($options['footable']['breakpoint'][$column])));
     }
 
