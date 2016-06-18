@@ -8,7 +8,7 @@
 class footable_breakpoint extends ctools_export_ui {
 
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   function list_sort_options() {
     return array(
@@ -21,7 +21,7 @@ class footable_breakpoint extends ctools_export_ui {
   }
 
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   function list_table_header() {
     return array(
@@ -34,7 +34,7 @@ class footable_breakpoint extends ctools_export_ui {
   }
 
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   function list_build_row($item, &$form_state, $operations) {
     // Set up sorting.
