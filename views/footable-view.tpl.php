@@ -19,7 +19,7 @@
  * @ingroup views_templates
  */
 ?>
-<table <?php if (!empty($footable['attributes'])): print drupal_attributes($footable['attributes']); endif; ?><?php if ($classes): print 'class="' . $classes . '" '; endif; ?><?php print $attributes; ?>>
+<table <?php if ($classes) { print 'class="'. $classes . '" '; } ?><?php print $attributes; ?>>
   <?php if (!empty($title)) : ?>
     <caption><?php print $title; ?></caption>
   <?php endif; ?>

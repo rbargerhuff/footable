@@ -378,13 +378,13 @@ function template_preprocess_footable_view(&$vars) {
   $vars['footable'] = array('attributes' => array(), 'breakpoints' => '');
 
   // Expand first row.
-  $vars['footable']['attributes']['data-expand-first'] = $options['footable']['expand_first'] ? 'true' : 'false';
+  $vars['attributes_array']['data-expand-first'] = $options['footable']['expand_first'] ? 'true' : 'false';
 
   // Show header.
-  $vars['footable']['attributes']['data-show-header'] = $options['footable']['show_header'] ? 'true' : 'false';
+  $vars['attributes_array']['data-show-header'] = $options['footable']['show_header'] ? 'true' : 'false';
 
   // Expandable column.
-  $vars['footable']['attributes']['data-toggle-column'] = $options['footable']['toggle_column'];
+  $vars['attributes_array']['data-toggle-column'] = $options['footable']['toggle_column'];
 
   // Add Bootstrap configuration.
   if (variable_get('footable_plugin_type', 'standalone') == 'bootstrap') {
@@ -408,22 +408,22 @@ function template_preprocess_footable_view(&$vars) {
   // Add components.
   // Filtering.
   if (!empty($options['footable']['component']['filtering']['enabled'])) {
-    $vars['footable']['attributes']['data-filtering'] = 'true';
-    $vars['footable']['attributes']['data-filter-delay'] = $options['footable']['component']['filtering']['delay'];
-    $vars['footable']['attributes']['data-filter-min'] = $options['footable']['component']['filtering']['min'];
-    $vars['footable']['attributes']['data-filter-placeholder'] = t($options['footable']['component']['filtering']['placeholder']);
-    $vars['footable']['attributes']['data-filter-position'] = $options['footable']['component']['filtering']['position'];
-    $vars['footable']['attributes']['data-filter-space'] = $options['footable']['component']['filtering']['space'];
+    $vars['attributes_array']['data-filtering'] = 'true';
+    $vars['attributes_array']['data-filter-delay'] = $options['footable']['component']['filtering']['delay'];
+    $vars['attributes_array']['data-filter-min'] = $options['footable']['component']['filtering']['min'];
+    $vars['attributes_array']['data-filter-placeholder'] = t($options['footable']['component']['filtering']['placeholder']);
+    $vars['attributes_array']['data-filter-position'] = $options['footable']['component']['filtering']['position'];
+    $vars['attributes_array']['data-filter-space'] = $options['footable']['component']['filtering']['space'];
   }
 
   // Paging.
   if (!empty($options['footable']['component']['paging']['enabled'])) {
-    $vars['footable']['attributes']['data-paging'] = 'true';
+    $vars['attributes_array']['data-paging'] = 'true';
   }
 
   // Sorting.
   if (!empty($options['footable']['component']['sorting']['enabled'])) {
-    $vars['footable']['attributes']['data-sorting'] = 'true';
+    $vars['attributes_array']['data-sorting'] = 'true';
   }
 
   // Add breakpoints.
@@ -431,7 +431,7 @@ function template_preprocess_footable_view(&$vars) {
   foreach (footable_breakpoint_load_multiple() as $breakpoint) {
     $breakpoints[$breakpoint->machine_name] = (int) $breakpoint->breakpoint;
   }
-  $vars['footable']['attributes']['data-breakpoints'] = drupal_json_encode($breakpoints);
+  $vars['attributes_array']['data-breakpoints'] = drupal_json_encode($breakpoints);
 
   // Add FooTable plugin files and calling script.
   footable_libraries_load();
