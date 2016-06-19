@@ -345,6 +345,7 @@ function template_preprocess_footable_view(&$vars) {
     // Sorting.
     if (!empty($options['footable']['component']['sorting']['enabled'])) {
       $vars['header'][$field] = check_plain(!empty($fields[$field]) ? $fields[$field]->label() : '');
+
       if (empty($options['info'][$field]['sortable']) || !$fields[$field]->click_sortable()) {
         $vars['column_attributes'][$column]['data-sortable'] = 'false';
       }
@@ -378,7 +379,6 @@ function template_preprocess_footable_view(&$vars) {
 
   // Add FooTable classes and data attributes.
   $vars['classes_array'][] = 'footable';
-  $vars['footable'] = array('attributes' => array(), 'breakpoints' => '');
 
   // Expand first row.
   $vars['attributes_array']['data-expand-first'] = $options['footable']['expand_first'] ? 'true' : 'false';
@@ -432,6 +432,9 @@ function template_preprocess_footable_view(&$vars) {
   // Add breakpoints.
   $breakpoints = array();
   foreach (footable_breakpoint_load_multiple() as $breakpoint) {
+    if (!empty($options['footable']['overwrite'][$breakpoint->machine_name])) {
+      $breakpoint->breakpoint = $options['footable']['overwrite'][$breakpoint->machine_name];
+    }
     $breakpoints[$breakpoint->machine_name] = (int) $breakpoint->breakpoint;
   }
   $vars['attributes_array']['data-breakpoints'] = drupal_json_encode($breakpoints);

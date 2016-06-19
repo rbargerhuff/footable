@@ -113,7 +113,7 @@ class footable_plugin_style_footable extends views_plugin_style_table {
         '#type' => 'fieldset',
         '#title' => t('Bootstrap'),
         '#collapsible' => TRUE,
-        '#collapsed' => FALSE,
+        '#collapsed' => TRUE,
       );
 
       $form['footable']['bootstrap']['striped'] = array(
@@ -330,7 +330,29 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       '#default_value' => $this->options['footable']['component']['sorting']['enabled'],
     );
 
-    // Breakpoint configuration.
+    // Breakpoints overwrite.
+    $form['footable']['overwrite'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Overwrite breakpoints'),
+//      '#description' => t(''),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    );
+
+    foreach (footable_breakpoint_load_multiple() as $breakpoint) {
+      $form['footable']['overwrite'][$breakpoint->machine_name] = array(
+        '#type' => 'textfield',
+        '#title' => check_plain($breakpoint->name),
+        '#element_validate' => array('element_validate_integer_positive'),
+        '#default_value' => isset($this->options['footable']['overwrite'][$breakpoint->machine_name]) ? $this->options['footable']['overwrite'][$breakpoint->machine_name] : NULL,
+        '#field_suffix' => 'px',
+        '#attributes' => array(
+          'placeholder' => $breakpoint->breakpoint,
+        ),
+      );
+    }
+
+    // Breakpoints.
     $form['footable']['breakpoint'] = array(
       '#type' => 'fieldset',
       '#title' => t('Collapsed columns'),
