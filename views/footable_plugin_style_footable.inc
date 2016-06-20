@@ -22,6 +22,8 @@ class footable_plugin_style_footable extends views_plugin_style_table {
         'expand_first' => FALSE,
         'show_header' => TRUE,
         'toggle_column' => 'first',
+        'icon_expanded' => 'plus',
+        'icon_collapsed' => 'minus',
         'bootstrap' => array(
           'striped' => FALSE,
           'bordered' => FALSE,
@@ -105,6 +107,24 @@ class footable_plugin_style_footable extends views_plugin_style_table {
         'last' => t('Last'),
       ),
       '#default_value' => $this->options['footable']['toggle_column'],
+    );
+
+    // Icons.
+    $icons = footable_icons();
+    $form['footable']['icon_collapsed'] = array(
+      '#type' => 'select',
+      '#title' => t('Collapsed icon style'),
+      '#description' => t('The icon displayed when a row is collapsed.'),
+      '#options' => $icons,
+      '#default_value' => $this->options['footable']['icon_collapsed'],
+    );
+
+    $form['footable']['icon_expanded'] = array(
+      '#type' => 'select',
+      '#title' => t('Expanded icon style'),
+      '#description' => t('The icon displayed when a row is expanded.'),
+      '#options' => $icons,
+      '#default_value' => $this->options['footable']['icon_expanded'],
     );
 
     // Bootstrap style configuration.
@@ -334,7 +354,6 @@ class footable_plugin_style_footable extends views_plugin_style_table {
     $form['footable']['overwrite'] = array(
       '#type' => 'fieldset',
       '#title' => t('Overwrite breakpoints'),
-//      '#description' => t(''),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
     );

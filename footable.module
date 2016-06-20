@@ -378,6 +378,7 @@ function template_preprocess_footable_view(&$vars) {
   }
 
   // Add FooTable classes and data attributes.
+  $type = variable_get('footable_plugin_type', 'standalone');
   $vars['classes_array'][] = 'footable';
 
   // Expand first row.
@@ -389,8 +390,15 @@ function template_preprocess_footable_view(&$vars) {
   // Expandable column.
   $vars['attributes_array']['data-toggle-column'] = $options['footable']['toggle_column'];
 
+  // Icon expanded.
+  $vars['classes_array'][] = 'fooicon-expanded-' . $options['footable']['icon_expanded'];
+
+  // Icon collapsed.
+  $vars['classes_array'][] = 'fooicon-collapsed-' . $options['footable']['icon_collapsed'];
+
+
   // Add Bootstrap configuration.
-  if (variable_get('footable_plugin_type', 'standalone') == 'bootstrap') {
+  if ($type == 'bootstrap') {
     if (!empty($options['footable']['bootstrap']['striped'])) {
       $vars['classes_array'][] = 'table-striped';
     }
@@ -442,6 +450,7 @@ function template_preprocess_footable_view(&$vars) {
   // Add FooTable plugin files and calling script.
   footable_libraries_load();
   drupal_add_js(drupal_get_path('module', 'footable') . '/footable.js');
+  drupal_add_css(drupal_get_path('module', 'footable') . '/css/footable_' . $type . '.css');
 }
 
 /**
@@ -569,4 +578,26 @@ function footable_breakpoint_delete($machine_name) {
     ->execute();
   ctools_include('export');
   ctools_export_load_object_reset('footable_breakpoint');
+}
+
+/**
+ * Build a list of icons.
+ *
+ * @return array
+ *   A keyed array of in the form of 'name' => 'title'.
+ */
+function footable_icons() {
+  $icons = array(
+    'plus' => t('Plus'),
+    'minus' => t('Minus'),
+    'plus-circle' => t('Plus circle'),
+    'minus-circle' => t('Minus circle'),
+    'chevron-left' => t('Chevron left'),
+    'chevron-right' => t('Chevron right'),
+    'chevron-up' => t('Chevron up'),
+    'chevron-down' => t('Chevron down'),
+  );
+
+  drupal_alter('footable_icons', $icons);
+  return $icons;
 }

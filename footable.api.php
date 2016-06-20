@@ -6,27 +6,21 @@
  */
 
 /**
- * Implements hook_footable_breakpoint_load_all_alter().
- *
  * Add, remove or edit FooTable breakpoints.
  *
  * @array $breakpoints
  *   A keyed array of breakpoints. Each key represents the name of a
- *   breakpoint, used the the column headers. The values are integers
- *   containing the breakpoint in pixels.
+ *   breakpoint.
  */
 function hook_footable_breakpoint_load_all_alter(&$breakpoints) {
 }
 
 /**
- * Implements hook_footable_breakpoint_load_alter().
- *
  * Add, remove or edit FooTable breakpoints.
  *
  * @array $breakpoints
  *   A keyed array of breakpoints. Each key represents the name of a
- *   breakpoint, used the the column headers. The values are integers
- *   containing the breakpoint in pixels.
+ *   breakpoint.
  */
 function hook_footable_breakpoint_load_alter(&$breakpoints) {
 }
@@ -65,4 +59,16 @@ function hook_default_footable_breakpoint() {
   $footable_breakpoint[$footable_breakpoint->machine_name] = $footable_breakpoint;
 
   return $footable_breakpoints;
+}
+
+/**
+ * Add, remove or edit FooTable icons.
+ *
+ * @array $icons
+ *   A keyed array of breakpoints. Each key represents the name of an
+ *   icon.
+ *
+ * @see footable_icons()
+ */
+function hook_footable_icons_alter(&$icons) {
 }
