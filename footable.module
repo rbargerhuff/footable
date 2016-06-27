@@ -333,7 +333,7 @@ function template_preprocess_footable_view(&$vars) {
     else {
       $vars['column_attributes'][$column]['data-type'] = 'text';
     }
-  dpm($vars['column_attributes'][$column]['data-type']);
+
     // Add breakpoints.
     if (!empty($options['footable']['breakpoint'][$column])) {
       if (!empty($options['footable']['breakpoint'][$column]['all'])) {
