@@ -333,7 +333,7 @@ function template_preprocess_footable_view(&$vars) {
     else {
       $vars['column_attributes'][$column]['data-type'] = 'text';
     }
-
+  dpm($vars['column_attributes'][$column]['data-type']);
     // Add breakpoints.
     if (!empty($options['footable']['breakpoint'][$column])) {
       if (!empty($options['footable']['breakpoint'][$column]['all'])) {
@@ -430,6 +430,11 @@ function template_preprocess_footable_view(&$vars) {
   // Paging.
   if (!empty($options['footable']['component']['paging']['enabled'])) {
     $vars['attributes_array']['data-paging'] = 'true';
+    $vars['attributes_array']['data-paging-count-format'] = $options['footable']['component']['paging']['countformat'];
+    $vars['attributes_array']['data-paging-current'] = $options['footable']['component']['paging']['current'];
+    $vars['attributes_array']['data-paging-limit'] = $options['footable']['component']['paging']['limit'];
+    $vars['attributes_array']['data-paging-position'] = $options['footable']['component']['paging']['position'];
+    $vars['attributes_array']['data-paging-size'] = $options['footable']['component']['paging']['size'];
   }
 
   // Sorting.
