@@ -12,7 +12,7 @@ $plugin = array(
     'menu prefix' => 'admin/config/user-interface',
     'menu item' => 'footable',
     'menu title' => 'FooTable',
-    'menu description' => 'Administer Mymodule presets.',
+    'menu description' => 'Administer FooTable breakpoints.',
   ),
   'title singular' => t('FooTable breakpoint'),
   'title plural' => t('FooTable breakpoints'),

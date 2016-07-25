@@ -362,8 +362,8 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       $form['footable']['overwrite'][$breakpoint->machine_name] = array(
         '#type' => 'textfield',
         '#title' => check_plain($breakpoint->name),
-        '#element_validate' => array('element_validate_integer_positive'),
         '#default_value' => isset($this->options['footable']['overwrite'][$breakpoint->machine_name]) ? $this->options['footable']['overwrite'][$breakpoint->machine_name] : NULL,
+        '#element_validate' => array('element_validate_integer_positive'),
         '#field_suffix' => 'px',
         '#attributes' => array(
           'placeholder' => $breakpoint->breakpoint,
