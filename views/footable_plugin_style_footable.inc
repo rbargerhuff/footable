@@ -405,7 +405,8 @@ class footable_plugin_style_footable extends views_plugin_style_table {
     $breakpoints = FALSE;
     if (!empty($form_state['values']['style_options']['footable']['breakpoint'])) {
       foreach ($form_state['values']['style_options']['footable']['breakpoint'] as $breakpoint) {
-        if (!empty(array_filter($breakpoint))) {
+        $bp = array_filter($breakpoint);
+        if (!empty($bp)) {
           $breakpoints = TRUE;
           break;
         }
