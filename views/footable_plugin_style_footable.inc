@@ -43,6 +43,7 @@ class footable_plugin_style_footable extends views_plugin_style_table {
           'filtering' => array(
             'enabled' => FALSE,
             'delay' => 1200,
+            'ignore_case' => TRUE,
             'min' => 3,
             'placeholder' => 'Search',
             'position' => 'right',
@@ -206,6 +207,22 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       '#description' => t('The number of milliseconds before a search input filter is applied after it changes.'),
       '#default_value' => $this->options['footable']['component']['filtering']['delay'],
       '#element_validate' => array('element_validate_integer_positive'),
+      '#states' => array(
+        'visible' => array(
+          ':input[name="style_options[footable][component][filtering][enabled]"]' => array('checked' => TRUE),
+        ),
+      ),
+    );
+
+    $form['footable']['component']['filtering']['ignore_case'] = array(
+      '#type' => 'select',
+      '#title' => t('Ignore case'),
+      '#description' => t('Whether or not to ignore case when filtering.'),
+      '#options' => array(
+        TRUE => t('Yes'),
+        FALSE => t('No'),
+      ),
+      '#default_value' => $this->options['footable']['component']['filtering']['ignore_case'],
       '#states' => array(
         'visible' => array(
           ':input[name="style_options[footable][component][filtering][enabled]"]' => array('checked' => TRUE),

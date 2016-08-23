@@ -436,6 +436,7 @@ function template_preprocess_footable_view(&$vars) {
   if (!empty($options['footable']['component']['filtering']['enabled'])) {
     $footable['filtering']['enabled'] = TRUE;
     $footable['filtering']['delay'] = $options['footable']['component']['filtering']['delay'];
+    $footable['filtering']['ignoreCase'] = !empty($options['footable']['component']['filtering']['ignore_case']);
     $footable['filtering']['min'] = $options['footable']['component']['filtering']['min'];
     $footable['filtering']['placeholder'] = t($options['footable']['component']['filtering']['placeholder']);
     $footable['filtering']['position'] = $options['footable']['component']['filtering']['position'];
