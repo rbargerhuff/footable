@@ -256,6 +256,12 @@ function theme_footable($variables) {
     $variables['attributes']['class'][] = 'footable';
   }
 
+  if (empty($variables['attributes']['id'])) {
+    $variables['attributes']['id'] = drupal_html_id('footable');
+  }
+
+  $footable = array();
+
   // Breakpoints
   if (empty($variables['breakpoints'])) {
     $variables['breakpoints'] = array();
@@ -263,16 +269,16 @@ function theme_footable($variables) {
       $variables['breakpoints'][$breakpoint->machine_name] = (int) $breakpoint->breakpoint;
     }
   }
-  $variables['attributes']['data-breakpoints'] = drupal_json_encode($variables['breakpoints']);
+  $footable['breakpoints'] = $variables['breakpoints'];
 
   // Expand first row.
-  $variables['attributes']['data-expand-first'] = $variables['expand_first'] ? 'true' : 'false';
+  $footable['expandFirst'] = !empty($variables['expand_first']);
 
   // Show header.
-  $variables['attributes']['data-show-header'] = $variables['show_header'] ? 'true' : 'false';
+  $footable['showHeader'] = !empty($variables['show_header']);
 
   // Expandable column.
-  $variables['attributes']['data-toggle-column'] = $variables['toggle_column'];
+  $footable['toggleColumn'] = $variables['toggle_column'];
 
   foreach ($variables['header'] as &$cell) {
     if (!is_array($cell)) {
@@ -291,6 +297,7 @@ function theme_footable($variables) {
   }
 
   footable_libraries_load();
+  drupal_add_js(array('footable' => array($variables['attributes']['id'] => $footable)), array('type' => 'setting'));
   drupal_add_js(drupal_get_path('module', 'footable') . '/footable.js');
   return theme('table', $variables);
 }
@@ -312,6 +319,8 @@ function template_preprocess_footable_view(&$vars) {
 
   $fields = &$view->field;
   $columns = $handler->sanitize_columns($options['columns'], $fields);
+
+  $footable = array();
 
   // Provide backwards compatibility with 7.x-1.x.
   if (!empty($options['footable']['hide']) && empty($options['footable']['breakpoint'])) {
@@ -347,11 +356,11 @@ function template_preprocess_footable_view(&$vars) {
       $vars['header'][$field] = check_plain(!empty($fields[$field]) ? $fields[$field]->label() : '');
 
       if (empty($options['info'][$field]['sortable']) || !$fields[$field]->click_sortable()) {
-        $vars['column_attributes'][$column]['data-sortable'] = 'false';
+        $vars['column_attributes'][$column]['data-sortable'] = FALSE;
       }
       else {
         if (!empty($options['default']) && $options['default'] == $field) {
-          $vars['column_attributes'][$column]['data-sorted'] = 'true';
+          $vars['column_attributes'][$column]['data-sorted'] = TRUE;
 
           if (!empty($options['info'][$field]['default_sort_order'])) {
             $vars['column_attributes'][$column]['data-direction'] = strtoupper($options['info'][$field]['default_sort_order']);
@@ -381,17 +390,21 @@ function template_preprocess_footable_view(&$vars) {
   $type = variable_get('footable_plugin_type', 'standalone');
   $vars['classes_array'][] = 'footable';
 
+  if (empty($vars['attributes_array']['id'])) {
+    $vars['attributes_array']['id'] = drupal_html_id('footable');
+  }
+
   // Expand all rows.
-  $vars['attributes_array']['data-expand-all'] = $options['footable']['expand_all'] ? 'true' : 'false';
+  $footable['expandAll'] = !empty($options['footable']['expand_all']);
 
   // Expand first row.
-  $vars['attributes_array']['data-expand-first'] = $options['footable']['expand_first'] ? 'true' : 'false';
+  $footable['expandFirst'] = !empty($options['footable']['expand_first']);
 
   // Show header.
-  $vars['attributes_array']['data-show-header'] = $options['footable']['show_header'] ? 'true' : 'false';
+  $footable['showHeader'] = !empty($options['footable']['show_header']);
 
   // Expandable column.
-  $vars['attributes_array']['data-toggle-column'] = $options['footable']['toggle_column'];
+  $footable['toggleColumn'] = $options['footable']['toggle_column'];
 
   // Icon expanded.
   $vars['classes_array'][] = 'fooicon-expanded-' . $options['footable']['icon_expanded'];
@@ -421,47 +434,47 @@ function template_preprocess_footable_view(&$vars) {
   // Add components.
   // Filtering.
   if (!empty($options['footable']['component']['filtering']['enabled'])) {
-    $vars['attributes_array']['data-filtering'] = 'true';
-    $vars['attributes_array']['data-filter-delay'] = $options['footable']['component']['filtering']['delay'];
-    $vars['attributes_array']['data-filter-min'] = $options['footable']['component']['filtering']['min'];
-    $vars['attributes_array']['data-filter-placeholder'] = t($options['footable']['component']['filtering']['placeholder']);
-    $vars['attributes_array']['data-filter-position'] = $options['footable']['component']['filtering']['position'];
-    $vars['attributes_array']['data-filter-space'] = $options['footable']['component']['filtering']['space'];
+    $footable['filtering']['enabled'] = TRUE;
+    $footable['filtering']['delay'] = $options['footable']['component']['filtering']['delay'];
+    $footable['filtering']['min'] = $options['footable']['component']['filtering']['min'];
+    $footable['filtering']['placeholder'] = t($options['footable']['component']['filtering']['placeholder']);
+    $footable['filtering']['position'] = $options['footable']['component']['filtering']['position'];
+    $footable['filtering']['space'] = $options['footable']['component']['filtering']['space'];
   }
 
   // Paging.
   if (!empty($options['footable']['component']['paging']['enabled'])) {
-    $vars['attributes_array']['data-paging'] = 'true';
-    $vars['attributes_array']['data-paging-count-format'] = $options['footable']['component']['paging']['countformat'];
-    $vars['attributes_array']['data-paging-current'] = $options['footable']['component']['paging']['current'];
-    $vars['attributes_array']['data-paging-limit'] = $options['footable']['component']['paging']['limit'];
-    $vars['attributes_array']['data-paging-position'] = $options['footable']['component']['paging']['position'];
-    $vars['attributes_array']['data-paging-size'] = $options['footable']['component']['paging']['size'];
+    $footable['paging']['enabled'] = TRUE;
+    $footable['paging']['countFormat'] = $options['footable']['component']['paging']['count_format'];
+    $footable['paging']['current'] = $options['footable']['component']['paging']['current'];
+    $footable['paging']['limit'] = $options['footable']['component']['paging']['limit'];
+    $footable['paging']['position'] = $options['footable']['component']['paging']['position'];
+    $footable['paging']['size'] = $options['footable']['component']['paging']['size'];
   }
 
   // Sorting.
   if (!empty($options['footable']['component']['sorting']['enabled'])) {
-    $vars['attributes_array']['data-sorting'] = 'true';
+    $footable['sorting'] = TRUE;
   }
 
   // Add breakpoints.
-  $breakpoints = array();
+  $footable['breakpoints'] = array();
   foreach (footable_breakpoint_load_multiple() as $breakpoint) {
     if (!empty($options['footable']['overwrite'][$breakpoint->machine_name])) {
       $breakpoint->breakpoint = $options['footable']['overwrite'][$breakpoint->machine_name];
     }
-    $breakpoints[$breakpoint->machine_name] = (int) $breakpoint->breakpoint;
+    $footable['breakpoints'][$breakpoint->machine_name] = (int) $breakpoint->breakpoint;
   }
-  $vars['attributes_array']['data-breakpoints'] = drupal_json_encode($breakpoints);
 
   // Add FooTable plugin files and calling script.
   footable_libraries_load();
+  drupal_add_js(array('footable' => array($vars['attributes_array']['id'] => $footable)), array('type' => 'setting'));
   drupal_add_js(drupal_get_path('module', 'footable') . '/footable.js');
   drupal_add_css(drupal_get_path('module', 'footable') . '/css/footable_' . $type . '.css');
 }
 
 /**
- * Sort footable breakpoint by breakpoint with name asa fallback.
+ * Sort footable breakpoint by breakpoint with name as a fallback.
  */
 function footable_breakpoint_sort($a, $b) {
   if ($a->breakpoint == $b->breakpoint) {

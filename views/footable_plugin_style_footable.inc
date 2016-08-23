@@ -34,7 +34,7 @@ class footable_plugin_style_footable extends views_plugin_style_table {
         'component' => array(
           'paging' => array(
             'enabled' => FALSE,
-            'countformat' => '{CP} of {TP}',
+            'count_format' => '{CP} of {TP}',
             'current' => 1,
             'limit' => 5,
             'position' => 'right',
@@ -285,11 +285,11 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       '#default_value' => $this->options['footable']['component']['paging']['enabled'],
     );
 
-    $form['footable']['component']['paging']['countformat'] = array(
+    $form['footable']['component']['paging']['count_format'] = array(
       '#type' => 'textfield',
       '#title' => t('Count format'),
       '#description' => t('The string used as a format to generate the count text.'),
-      '#default_value' => $this->options['footable']['component']['paging']['countformat'],
+      '#default_value' => $this->options['footable']['component']['paging']['count_format'],
       '#states' => array(
         'visible' => array(
           ':input[name="style_options[footable][component][paging][enabled]"]' => array('checked' => TRUE),

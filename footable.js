@@ -9,7 +9,10 @@
   Drupal.behaviors.footable = {
     attach: function (context, settings) {
       if ($('.footable', context).footable) {
-        $('.footable', context).footable();
+        $('.footable', context).each(function () {
+          var id = $(this).attr('id');
+          $(this).footable(settings.footable[id]);
+        });
       }
     }
   };
