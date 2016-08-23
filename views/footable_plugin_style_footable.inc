@@ -19,6 +19,7 @@ class footable_plugin_style_footable extends views_plugin_style_table {
     $options = parent::option_definition();
     $options['footable'] = array(
       'default' => array(
+        'expand_all' => FALSE,
         'expand_first' => FALSE,
         'show_header' => TRUE,
         'toggle_column' => 'first',
@@ -76,15 +77,31 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       '#collapsed' => FALSE,
     );
 
+    $form['footable']['expand_all'] = array(
+      '#type' => 'select',
+      '#title' => t('Expand all rows'),
+      '#description' => t('Whether or not to expand all rows of the table.'),
+      '#options' => array(
+        FALSE => t('Disabled'),
+        TRUE => t('Enabled'),
+      ),
+      '#default_value' => $this->options['footable']['expand_all'],
+    );
+
     $form['footable']['expand_first'] = array(
       '#type' => 'select',
       '#title' => t('Expand first row'),
-      '#description' => t('Whether or not to expand the first rows details.'),
+      '#description' => t('Whether or not to expand the first row of the table.'),
       '#options' => array(
         FALSE => t('Disabled'),
         TRUE => t('Enabled'),
       ),
       '#default_value' => $this->options['footable']['expand_first'],
+      '#states' => array(
+        'invisible' => array(
+          ':input[name="style_options[footable][expand_all]"]' => array('value' => 1),
+        ),
+      ),
     );
 
     $form['footable']['show_header'] = array(

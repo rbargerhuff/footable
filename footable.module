@@ -381,6 +381,9 @@ function template_preprocess_footable_view(&$vars) {
   $type = variable_get('footable_plugin_type', 'standalone');
   $vars['classes_array'][] = 'footable';
 
+  // Expand all rows.
+  $vars['attributes_array']['data-expand-all'] = $options['footable']['expand_all'] ? 'true' : 'false';
+
   // Expand first row.
   $vars['attributes_array']['data-expand-first'] = $options['footable']['expand_first'] ? 'true' : 'false';
 
@@ -395,7 +398,6 @@ function template_preprocess_footable_view(&$vars) {
 
   // Icon collapsed.
   $vars['classes_array'][] = 'fooicon-collapsed-' . $options['footable']['icon_collapsed'];
-
 
   // Add Bootstrap configuration.
   if ($type == 'bootstrap') {
