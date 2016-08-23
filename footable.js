@@ -8,7 +8,9 @@
 
   Drupal.behaviors.footable = {
     attach: function (context, settings) {
-      $('.footable', context).footable();
+      if ($('.footable', context).footable) {
+        $('.footable', context).footable();
+      }
     }
   };
 }(jQuery));
