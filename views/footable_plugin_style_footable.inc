@@ -274,7 +274,7 @@ class footable_plugin_style_footable extends views_plugin_style_table {
 
     $form['footable']['component']['filtering']['space'] = array(
       '#type' => 'select',
-      '#title' => t('Position'),
+      '#title' => t('Space'),
       '#description' => t('How to treat whitespace.'),
       '#options' => array(
         'AND' => 'AND',
