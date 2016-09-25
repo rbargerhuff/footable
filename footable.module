@@ -111,7 +111,7 @@ function footable_libraries_info() {
     'download url' => 'https://github.com/fooplugins/FooTable/tags',
     'version arguments' => array(
       'file' => 'footable.min.js',
-      // FooTable 3.0.x.
+      // FooTable 3.x.
       'pattern' => '#version ([0-9\.a-z]+)#',
       'lines' => 10,
     ),
@@ -475,7 +475,7 @@ function template_preprocess_footable_view(&$vars) {
 }
 
 /**
- * Sort footable breakpoint by breakpoint with name as a fallback.
+ * Sort FooTable breakpoint by breakpoint with name as a fallback.
  */
 function footable_breakpoint_sort($a, $b) {
   if ($a->breakpoint == $b->breakpoint) {
