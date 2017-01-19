@@ -429,26 +429,5 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       );
     }
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  function options_validate(&$form, &$form_state) {
-    parent::options_validate($form, $form_state);
-
-    $breakpoints = FALSE;
-    if (!empty($form_state['values']['style_options']['footable']['breakpoint'])) {
-      foreach ($form_state['values']['style_options']['footable']['breakpoint'] as $breakpoint) {
-        $bp = array_filter($breakpoint);
-        if (!empty($bp)) {
-          $breakpoints = TRUE;
-          break;
-        }
-      }
-    }
-
-    if (!$breakpoints) {
-      form_error($form['footable']['breakpoint'], t('You need to have atleast one column that has a breakpoint.'));
-    }
-  }
+  
 }
