@@ -71,6 +71,27 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       return;
     }
 
+    // Override default plugin theme.
+    $form['#theme'] = 'footable_style_plugin_table';
+
+    $columns = $this->sanitize_columns($this->options['columns']);
+    foreach ($columns as $field => $column) {
+      $safe = str_replace(array('][', '_', ' '), '-', $field);
+      $form['info'][$field]['type'] = array(
+        '#type' => 'select',
+        '#options' => array(
+          '' => t('Automatic'),
+          'number' => t('Number'),
+          'date' => t('Date'),
+          'text' => t('Text'),
+          'html' => t('HTML'),
+        ),
+        '#default_value' => !empty($this->options['info'][$field]['type']) ? $this->options['info'][$field]['type'] : '',
+        '#dependency' => array('edit-style-options-columns-' . $safe => array($field)),
+      );
+    }
+
+
     $form['footable'] = array(
       '#type' => 'fieldset',
       '#title' => t('FooTable settings'),
@@ -410,7 +431,7 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       '#type' => 'fieldset',
       '#title' => t('Collapsed columns'),
       '#description' => t('Select the "breakpoints" where a particular column should be hidden.'),
-      '#collapsible' => FALSE,
+      '#collapsible' => TRUE,
       '#collapsed' => FALSE,
     );
 
@@ -429,5 +450,5 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       );
     }
   }
-  
+
 }
