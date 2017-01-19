@@ -24,24 +24,22 @@ function footable_requirements($phase) {
         )),
       );
     }
+    elseif (version_compare($plugin['version'], FOOTABLE_PLUGIN_VERSION_MIN, '>=')) {
+      $requirements['footable'] = array(
+        'title' => $t('FooTable plugin'),
+        'value' => $plugin['version'],
+        'severity' => REQUIREMENT_OK,
+      );
+    }
     else {
-      if (version_compare($plugin['version'], FOOTABLE_PLUGIN_VERSION_MIN, '>=')) {
-        $requirements['footable'] = array(
-          'title' => $t('FooTable plugin'),
-          'value' => $plugin['version'],
-          'severity' => REQUIREMENT_OK,
-        );
-      }
-      else {
-        $requirements['footable'] = array(
-          'title' => $t('FooTable plugin'),
-          'value' => $plugin['version'],
-          'severity' => REQUIREMENT_ERROR,
-          'description' => $t('The FooTable module minimally requires the @version version of the FooTable plugin.', array(
-            '@version' => FOOTABLE_PLUGIN_VERSION_MIN,
-          )),
-        );
-      }
+      $requirements['footable'] = array(
+        'title' => $t('FooTable plugin'),
+        'value' => $plugin['version'],
+        'severity' => REQUIREMENT_ERROR,
+        'description' => $t('The FooTable module minimally requires the @version version of the FooTable plugin.', array(
+          '@version' => FOOTABLE_PLUGIN_VERSION_MIN,
+        )),
+      );
     }
   }
 
