@@ -326,7 +326,9 @@ function template_preprocess_footable_view(&$vars) {
 
   // Sorting.
   if (!empty($options['footable']['component']['sorting']['enabled'])) {
-    $footable['sorting'] = TRUE;
+    $footable['sorting'] = array(
+      'enabled' => TRUE,
+    );
   }
 
   // Add breakpoints.
