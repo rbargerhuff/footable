@@ -175,6 +175,7 @@ function template_preprocess_footable_view(&$vars) {
   $result = $vars['result'] = $vars['rows'];
 
   $options = $view->style_plugin->options;
+  /** @var views_plugin_style_table $handler */
   $handler = $view->style_plugin;
 
   $fields = &$view->field;
@@ -189,18 +190,20 @@ function template_preprocess_footable_view(&$vars) {
 
   // Set columns to be hidden by FooTable plugin.
   foreach ($columns as $field => $column) {
+    /** @var views_handler_field $field_handler */
+    $field_handler = $fields[$field];
 
     // Get column type.
     if (!empty($options['info'][$column]['type'])) {
       $vars['column_attributes'][$column]['data-type'] = $options['info'][$column]['type'];
     }
-    elseif ($fields[$field] instanceof views_handler_field_date) {
+    elseif ($field_handler instanceof views_handler_field_date) {
       $vars['column_attributes'][$column]['data-type'] = 'date';
     }
-    elseif (is_numeric($fields[$field]->last_render)) {
+    elseif (is_numeric($field_handler->last_render)) {
       $vars['column_attributes'][$column]['data-type'] = 'numeric';
     }
-    elseif (drupal_strlen($fields[$field]->last_render) != drupal_strlen(strip_tags($fields[$field]->last_render))) {
+    elseif (drupal_strlen($field_handler->last_render) != drupal_strlen(strip_tags($field_handler->last_render))) {
       $vars['column_attributes'][$column]['data-type'] = 'html';
     }
     else {
@@ -217,9 +220,9 @@ function template_preprocess_footable_view(&$vars) {
 
     // Sorting.
     if (!empty($options['footable']['component']['sorting']['enabled'])) {
-      $vars['header'][$field] = check_plain(!empty($fields[$field]) ? $fields[$field]->label() : '');
+      $vars['header'][$field] = check_plain(!empty($field_handler) ? $field_handler->label() : '');
 
-      if (empty($options['info'][$field]['sortable']) || !$fields[$field]->click_sortable()) {
+      if (empty($options['info'][$field]['sortable']) || !$field_handler->click_sortable()) {
         $vars['column_attributes'][$column]['data-sortable'] = FALSE;
       }
       else {
@@ -298,23 +301,27 @@ function template_preprocess_footable_view(&$vars) {
   // Add components.
   // Filtering.
   if (!empty($options['footable']['component']['filtering']['enabled'])) {
-    $footable['filtering']['enabled'] = TRUE;
-    $footable['filtering']['delay'] = $options['footable']['component']['filtering']['delay'];
-    $footable['filtering']['ignoreCase'] = !empty($options['footable']['component']['filtering']['ignore_case']);
-    $footable['filtering']['min'] = $options['footable']['component']['filtering']['min'];
-    $footable['filtering']['placeholder'] = t($options['footable']['component']['filtering']['placeholder']);
-    $footable['filtering']['position'] = $options['footable']['component']['filtering']['position'];
-    $footable['filtering']['space'] = $options['footable']['component']['filtering']['space'];
+    $footable['filtering'] = array(
+      'enabled' => TRUE,
+      'delay' => $options['footable']['component']['filtering']['delay'],
+      'ignoreCase' => !empty($options['footable']['component']['filtering']['ignore_case']),
+      'min' => $options['footable']['component']['filtering']['min'],
+      'placeholder' => t($options['footable']['component']['filtering']['placeholder']),
+      'position' => $options['footable']['component']['filtering']['position'],
+      'space' => $options['footable']['component']['filtering']['space'],
+    );
   }
 
   // Paging.
   if (!empty($options['footable']['component']['paging']['enabled'])) {
-    $footable['paging']['enabled'] = TRUE;
-    $footable['paging']['countFormat'] = $options['footable']['component']['paging']['count_format'];
-    $footable['paging']['current'] = $options['footable']['component']['paging']['current'];
-    $footable['paging']['limit'] = $options['footable']['component']['paging']['limit'];
-    $footable['paging']['position'] = $options['footable']['component']['paging']['position'];
-    $footable['paging']['size'] = $options['footable']['component']['paging']['size'];
+    $footable['paging'] = array(
+      'enabled' => TRUE,
+      'countFormat' => $options['footable']['component']['paging']['count_format'],
+      'current' => $options['footable']['component']['paging']['current'],
+      'limit' => $options['footable']['component']['paging']['limit'],
+      'position' => $options['footable']['component']['paging']['position'],
+      'size' => $options['footable']['component']['paging']['size'],
+    );
   }
 
   // Sorting.
