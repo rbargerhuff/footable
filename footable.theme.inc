@@ -94,7 +94,7 @@
  * @see theme_table()
  */
 function theme_footable($variables) {
-  // Add FooTable class
+  // Add FooTable class.
   if (empty($variables['attributes']['class']) || !in_array('footable', $variables['attributes']['class'])) {
     $variables['attributes']['class'][] = 'footable';
   }
@@ -105,7 +105,7 @@ function theme_footable($variables) {
 
   $footable = array();
 
-  // Breakpoints
+  // Breakpoints.
   if (empty($variables['breakpoints'])) {
     $variables['breakpoints'] = array();
     foreach (footable_breakpoint_load_multiple() as $breakpoint) {
@@ -213,7 +213,10 @@ function theme_footable_style_plugin_table($variables) {
   }
 
   // Add the special 'None' row.
-  $rows[] = array(t('None'), '', '', '', '', '', array('align' => 'center', 'data' => drupal_render($form['default'][-1])), '');
+  $rows[] = array(t('None'), '', '', '', '', '', array(
+    'align' => 'center',
+    'data' => drupal_render($form['default'][-1]),
+  ), '');
 
   $output .= theme('table', array('header' => $header, 'rows' => $rows));
   $output .= drupal_render_children($form);

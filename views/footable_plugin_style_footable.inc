@@ -91,7 +91,6 @@ class footable_plugin_style_footable extends views_plugin_style_table {
       );
     }
 
-
     $form['footable'] = array(
       '#type' => 'fieldset',
       '#title' => t('FooTable settings'),

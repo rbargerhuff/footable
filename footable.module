@@ -402,7 +402,7 @@ function footable_breakpoint_load_all($default = FALSE, $disabled = FALSE) {
  * @return array
  *   List of loaded FooTable breakpoints.
  */
-function footable_breakpoint_load_multiple($machine_names = array(), $disabled = FALSE) {
+function footable_breakpoint_load_multiple(array $machine_names = array(), $disabled = FALSE) {
   ctools_include('export');
   $breakpoints = empty($machine_names) ? ctools_export_load_object('footable_breakpoint') : ctools_export_load_object('footable_breakpoint', 'names', $machine_names);
   drupal_alter('footable_breakpoint_load', $breakpoints);

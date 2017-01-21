@@ -50,7 +50,7 @@ function hook_footable_breakpoint_load_alter(&$breakpoints) {
 function hook_default_footable_breakpoint() {
   $footable_breakpoints = array();
 
-  $footable_breakpoint = new stdClass;
+  $footable_breakpoint = new stdClass();
   $footable_breakpoint->disabled = FALSE;
   $footable_breakpoint->api_version = 1;
   $footable_breakpoint->name = 'Example breakpoint';
