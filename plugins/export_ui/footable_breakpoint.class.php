@@ -10,7 +10,7 @@ class footable_breakpoint extends ctools_export_ui {
   /**
    * {@inheritdoc}
    */
-  function list_sort_options() {
+  public function list_sort_options() {
     return array(
       'name' => t('Name'),
       'machine_name' => t('Machine name'),
@@ -23,7 +23,7 @@ class footable_breakpoint extends ctools_export_ui {
   /**
    * {@inheritdoc}
    */
-  function list_table_header() {
+  public function list_table_header() {
     return array(
       array('data' => t('Name'), 'class' => array('ctools-export-ui-name')),
       array('data' => t('Machine name'), 'class' => array('ctools-export-ui-machine-name')),
@@ -36,21 +36,25 @@ class footable_breakpoint extends ctools_export_ui {
   /**
    * {@inheritdoc}
    */
-  function list_build_row($item, &$form_state, $operations) {
+  public function list_build_row($item, &$form_state, $operations) {
     // Set up sorting.
     switch ($form_state['values']['order']) {
       case 'name':
         $sort = array($item->name);
         break;
+
       case 'machine_name':
         $sort = array($item->machine_name);
         break;
+
       case 'breakpoint':
         $sort = array($item->breakpoint);
         break;
+
       case 'storage':
         $sort = array($item->type);
         break;
+
       case 'disabled':
       default:
         $sort = array(empty($item->disabled));

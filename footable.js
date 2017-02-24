@@ -18,7 +18,7 @@
             'collapse.ft.row': function (e, ft, row) {
               row.$el.removeClass('expanded');
             }
-          }).footable(settings.footable[id]).on();
+          }).footable(settings.footable[id]);
         });
       }
     }

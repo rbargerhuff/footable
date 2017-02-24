@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * FooTable theme functions.
+ */
+
+/**
  * Returns HTML for a table.
  *
  * @param array $variables
