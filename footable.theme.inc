@@ -88,6 +88,7 @@
  *     of a breakpoint, used the the column headers. The values are integers
  *     containing the breakpoint in pixels. If this value is left empty, all
  *     enabled FooTable breakpoints will be used.
+ *   - expand_all: Whether or not to expand all rows of the table.
  *   - expand_first: Whether or not to expand the first rows details.
  *   - show_header: Whether or not to display a header row in the table.
  *   - toggle_column: Specify which column the toggle is appended to in a row
@@ -118,6 +119,9 @@ function theme_footable($variables) {
     }
   }
   $footable['breakpoints'] = $variables['breakpoints'];
+
+  // Expand all rows.
+  $footable['expandAll'] = !empty($variables['expand_all']);
 
   // Expand first row.
   $footable['expandFirst'] = !empty($variables['expand_first']);
