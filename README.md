@@ -47,9 +47,9 @@ Ported to Backdrop CMS by [Rick Bargerhuff](https://github.com/rbargerhuff).
 
 Originally maintained for Drupal by:
 
-  - [Matt V.](https://www.drupal.org/u/matt-v).
+  - [Matt V.](https://www.drupal.org/u/matt-v)
 
-  - [Arkener](https://www.drupal.org/u/arkener).
+  - [Arkener](https://www.drupal.org/u/arkener)
 
 
 License
