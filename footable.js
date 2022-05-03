@@ -6,10 +6,10 @@
 (function ($) {
   'use strict';
 
-  Drupal.behaviors.footable = {
+  Backdrop.behaviors.footable = {
     attach: function (context, settings) {
       if ($('.footable', context).footable) {
-        $('.footable', context).each(function () {
+        $('.footable', context).once('footable', function () {
           var id = $(this).attr('id');
           $(this).on({
             'expand.ft.row': function (e, ft, row) {
@@ -18,7 +18,7 @@
             'collapse.ft.row': function (e, ft, row) {
               row.$el.removeClass('expanded');
             }
-          }).footable(settings.footable[id]);
+          }).footable(settings.footable[id]).on();
         });
       }
     }

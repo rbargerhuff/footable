@@ -32,9 +32,7 @@ function hook_footable_breakpoint_load_alter(&$breakpoints) {
  *
  * This hook should be placed in MODULENAME.footable_breakpoint.inc and it will
  * be auto-loaded. MODULENAME.footable_breakpoint.inc *must* be in the same
- * directory as the .module file which *must* also contain an implementation of
- * hook_ctools_plugin_api, preferably with the same code as found in
- * footable_ctools_plugin_api().
+ * directory as the .module file.
  *
  * The $config->disabled boolean attribute indicates whether the FooTable
  * breakpoint instance should be enabled (FALSE) or disabled (TRUE) by default.
@@ -45,10 +43,9 @@ function hook_footable_breakpoint_load_alter(&$breakpoints) {
  *   name.
  *
  * @see footable_default_footable_breakpoint()
- * @see footable_ctools_plugin_api()
  */
 function hook_default_footable_breakpoint() {
-  $footable_breakpoints = array();
+  $footable_breakpoints = [];
 
   $footable_breakpoint = new stdClass();
   $footable_breakpoint->disabled = FALSE;

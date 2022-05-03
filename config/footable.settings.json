@@ -1,0 +1,6 @@
+{
+  "_config_name": "footable.settings",
+  "footable_plugin_type": "standalone",
+  "footable_plugin_compression": "minified",
+  "footable_breakpoint_load_default": true
+}

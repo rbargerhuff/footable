@@ -1,11 +1,6 @@
 <?php
 
 /**
- * @file
- * FooTable theme functions.
- */
-
-/**
  * Returns HTML for a table.
  *
  * @param array $variables
@@ -44,7 +39,8 @@
  *       ),
  *       // Row with attributes on the row and some of its cells.
  *       array(
- *         'data' => array('Cell 1', array('data' => 'Cell 2', 'colspan' => 2)), 'class' => array('funky')
+ *         'data' => array('Cell 1', array('data' => 'Cell 2', 'colspan' =>
+ *   2)), 'class' => array('funky')
  *       )
  *     );
  * @endcode
@@ -88,7 +84,6 @@
  *     of a breakpoint, used the the column headers. The values are integers
  *     containing the breakpoint in pixels. If this value is left empty, all
  *     enabled FooTable breakpoints will be used.
- *   - expand_all: Whether or not to expand all rows of the table.
  *   - expand_first: Whether or not to expand the first rows details.
  *   - show_header: Whether or not to display a header row in the table.
  *   - toggle_column: Specify which column the toggle is appended to in a row
@@ -106,22 +101,19 @@ function theme_footable($variables) {
   }
 
   if (empty($variables['attributes']['id'])) {
-    $variables['attributes']['id'] = drupal_html_id('footable');
+    $variables['attributes']['id'] = backdrop_html_id('footable');
   }
 
-  $footable = array();
+  $footable = [];
 
   // Breakpoints.
   if (empty($variables['breakpoints'])) {
-    $variables['breakpoints'] = array();
+    $variables['breakpoints'] = [];
     foreach (footable_breakpoint_load_multiple() as $breakpoint) {
       $variables['breakpoints'][$breakpoint->machine_name] = (int) $breakpoint->breakpoint;
     }
   }
   $footable['breakpoints'] = $variables['breakpoints'];
-
-  // Expand all rows.
-  $footable['expandAll'] = !empty($variables['expand_all']);
 
   // Expand first row.
   $footable['expandFirst'] = !empty($variables['expand_first']);
@@ -134,7 +126,7 @@ function theme_footable($variables) {
 
   foreach ($variables['header'] as &$cell) {
     if (!is_array($cell)) {
-      $cell = array('data' => $cell);
+      $cell = ['data' => $cell];
     }
 
     // Add datatype.
@@ -149,8 +141,8 @@ function theme_footable($variables) {
   }
 
   footable_libraries_load();
-  drupal_add_js(array('footable' => array($variables['attributes']['id'] => $footable)), array('type' => 'setting'));
-  drupal_add_js(drupal_get_path('module', 'footable') . '/footable.js');
+  backdrop_add_js(['footable' => [$variables['attributes']['id'] => $footable]], ['type' => 'setting']);
+  backdrop_add_js(backdrop_get_path('module', 'footable') . '/footable.js');
   return theme('table', $variables);
 }
 
@@ -162,72 +154,81 @@ function theme_footable($variables) {
 function theme_footable_style_plugin_table($variables) {
   $form = $variables['form'];
 
-  $output = drupal_render($form['description_markup']);
+  $output = backdrop_render($form['description_markup']);
 
-  $header = array(
+  $header = [
     t('Field'),
     t('Column'),
     t('Type'),
     t('Align'),
     t('Separator'),
-    array(
+    [
       'data' => t('Sortable'),
       'align' => 'center',
-    ),
-    array(
+    ],
+    [
       'data' => t('Default order'),
       'align' => 'center',
-    ),
-    array(
+    ],
+    [
       'data' => t('Default sort'),
       'align' => 'center',
-    ),
-    array(
+    ],
+    [
       'data' => t('Hide empty column'),
       'align' => 'center',
-    ),
-  );
-  $rows = array();
+    ],
+  ];
+  $rows = [];
   foreach (element_children($form['columns']) as $id) {
-    $row = array();
-    $row[] = check_plain(drupal_render($form['info'][$id]['name']));
-    $row[] = drupal_render($form['columns'][$id]);
-    $row[] = drupal_render($form['info'][$id]['type']);
-    $row[] = drupal_render($form['info'][$id]['align']);
-    $row[] = drupal_render($form['info'][$id]['separator']);
+    $row = [];
+    $row[] = check_plain(backdrop_render($form['info'][$id]['name']));
+    $row[] = backdrop_render($form['columns'][$id]);
+    $row[] = backdrop_render($form['info'][$id]['type']);
+    $row[] = backdrop_render($form['info'][$id]['align']);
+    $row[] = backdrop_render($form['info'][$id]['separator']);
     if (!empty($form['info'][$id]['sortable'])) {
-      $row[] = array(
-        'data' => drupal_render($form['info'][$id]['sortable']),
+      $row[] = [
+        'data' => backdrop_render($form['info'][$id]['sortable']),
         'align' => 'center',
-      );
-      $row[] = array(
-        'data' => drupal_render($form['info'][$id]['default_sort_order']),
+      ];
+      $row[] = [
+        'data' => backdrop_render($form['info'][$id]['default_sort_order']),
         'align' => 'center',
-      );
-      $row[] = array(
-        'data' => drupal_render($form['default'][$id]),
+      ];
+      $row[] = [
+        'data' => backdrop_render($form['default'][$id]),
         'align' => 'center',
-      );
+      ];
     }
     else {
       $row[] = '';
       $row[] = '';
       $row[] = '';
     }
-    $row[] = array(
-      'data' => drupal_render($form['info'][$id]['empty_column']),
+    $row[] = [
+      'data' => backdrop_render($form['info'][$id]['empty_column']),
       'align' => 'center',
-    );
+    ];
     $rows[] = $row;
   }
 
   // Add the special 'None' row.
-  $rows[] = array(t('None'), '', '', '', '', '', array(
-    'align' => 'center',
-    'data' => drupal_render($form['default'][-1]),
-  ), '');
+  $rows[] = [
+    t('None'),
+    '',
+    '',
+    '',
+    '',
+    '',
+    [
+      'align' => 'center',
+      'data' => backdrop_render($form['default'][-1]),
+    ],
+    '',
+  ];
 
-  $output .= theme('table', array('header' => $header, 'rows' => $rows));
-  $output .= drupal_render_children($form);
+  $output .= theme('table', ['header' => $header, 'rows' => $rows]);
+  $output .= backdrop_render_children($form);
   return $output;
 }

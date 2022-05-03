@@ -6,7 +6,6 @@
  *
  * - $title : The title of this group of rows.  May be empty.
  * - $header: An array of header labels keyed by field id.
- * - $caption: The caption for this table. May be empty.
  * - $header_classes: An array of header classes keyed by field id.
  * - $fields: An array of CSS IDs to use for each field id.
  * - $classes: A class or classes to apply to the table, based on settings.
@@ -20,15 +19,17 @@
  * @ingroup views_templates
  */
 ?>
-<table <?php if ($classes) { print 'class="'. $classes . '" '; } ?><?php print $attributes; ?>>
-  <?php if (!empty($title) || !empty($caption)): ?>
-    <caption><?php print $caption . $title; ?></caption>
+<table <?php if ($classes) {
+  print 'class="' . implode(' ', $classes) . '" ';
+} ?><?php print backdrop_attributes($attributes); ?>>
+  <?php if (!empty($title)) : ?>
+    <caption><?php print $title; ?></caption>
   <?php endif; ?>
   <?php if (!empty($header)) : ?>
     <thead>
     <tr>
       <?php foreach ($header as $field => $label): ?>
-        <th <?php if (!empty($column_attributes[$field])): print drupal_attributes($column_attributes[$field]); endif; ?><?php if ($header_classes[$field]): print 'class="' . $header_classes[$field] . '" '; endif; ?>>
+        <th <?php if (!empty($column_attributes[$field])): print backdrop_attributes($column_attributes[$field]); endif; ?><?php if ($header_classes[$field]): print 'class="' . implode(' ', $header_classes[$field]) . '" '; endif; ?>>
           <?php print $label; ?>
         </th>
       <?php endforeach; ?>
@@ -39,7 +40,7 @@
   <?php foreach ($rows as $row_count => $row): ?>
     <tr <?php if ($row_classes[$row_count]): print 'class="' . implode(' ', $row_classes[$row_count]) . '"'; endif; ?>>
       <?php foreach ($row as $field => $content): ?>
-        <td <?php if ($field_classes[$field][$row_count]): print 'class="' . $field_classes[$field][$row_count] . '" '; endif; ?><?php print drupal_attributes($field_attributes[$field][$row_count]); ?>>
+        <td <?php if ($field_classes[$field][$row_count]): print 'class="' . implode( ' ', $field_classes[$field][$row_count]) . '" '; endif; ?><?php print backdrop_attributes($field_attributes[$field][$row_count]); ?>>
           <?php print $content; ?>
         </td>
       <?php endforeach; ?>
