@@ -225,15 +225,15 @@ function template_preprocess_footable_view(&$vars) {
     }
 
     // Sorting.
-    if (!empty($options['footable']['component']['sorting']['enabled'])) {
+    if (!empty($options['footable']['component']['sorting']['enabled']) && isset($vars['header'][$field])) {
       $vars['header'][$field] = check_plain(!empty($field_handler) ? $field_handler->label() : '');
 
       if (empty($options['info'][$field]['sortable']) || !$field_handler->click_sortable()) {
-        $vars['column_attributes'][$column]['data-sortable'] = FALSE;
+        $vars['column_attributes'][$column]['data-sortable'] = 'false';
       }
       else {
         if (!empty($options['default']) && $options['default'] == $field) {
-          $vars['column_attributes'][$column]['data-sorted'] = TRUE;
+          $vars['column_attributes'][$column]['data-sorted'] = 'true';
 
           if (!empty($options['info'][$field]['default_sort_order'])) {
             $vars['column_attributes'][$column]['data-direction'] = strtoupper($options['info'][$field]['default_sort_order']);
