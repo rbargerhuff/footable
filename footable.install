@@ -60,15 +60,6 @@ function footable_schema() {
 }
 
 /**
- * Implements hook_uninstall().
- */
-function footable_uninstall() {
-  config_clear('footable.settings', 'footable_plugin_type');
-  config_clear('footable.settings', 'footable_plugin_compression');
-  config_clear('footable.settings', 'footable_breakpoint_load_default');
-}
-
-/**
  * Implements hook_update_last_removed().
  */
 function footable_update_last_removed() {
@@ -88,11 +79,4 @@ function footable_update_1000() {
   update_variable_del('footable_plugin_type');
   update_variable_del('footable_plugin_compression');
   update_variable_del('footable_breakpoint_load_default');
-}
-
-/**
- * Implements hook_install().
- */
-function footable_install() {
-  // Dynamically generated variable data was detected.
 }
