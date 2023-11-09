@@ -22,14 +22,13 @@ function footable_permission() {
  * Implements hook_menu().
  */
 function footable_menu() {
-  $items['admin/config/user-interface/footable/settings'] = [
-    'title' => 'Settings',
+  $items['admin/config/user-interface/footable'] = [
+    'title' => 'FooTable',
     'description' => 'Configure FooTable settings.',
     'page callback' => 'backdrop_get_form',
     'page arguments' => ['footable_form_admin_settings'],
     'access arguments' => ['administer footable'],
     'file' => 'footable.admin.inc',
-    'type' => MENU_LOCAL_TASK,
   ];
   return $items;
 }
@@ -74,7 +73,7 @@ function footable_views_api() {
  */
 function footable_jqmulti_files() {
   return [
-    backdrop_get_path('module', 'footable') . '/footable.js',
+    backdrop_get_path('module', 'footable') . '/js/footable.js',
   ];
 }
 
@@ -351,7 +350,7 @@ function template_preprocess_footable_view(&$vars) {
   footable_libraries_load();
 
   backdrop_add_js(['footable' => [$vars['attributes']['id'] => $footable]], ['type' => 'setting']);
-  backdrop_add_js(backdrop_get_path('module', 'footable') . '/footable.js');
+  backdrop_add_js(backdrop_get_path('module', 'footable') . '/js/footable.js');
   backdrop_add_css(backdrop_get_path('module', 'footable') . '/css/footable_' . $type . '.css');
 }
 

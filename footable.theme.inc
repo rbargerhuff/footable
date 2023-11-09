@@ -142,7 +142,7 @@ function theme_footable($variables) {
 
   footable_libraries_load();
   backdrop_add_js(['footable' => [$variables['attributes']['id'] => $footable]], ['type' => 'setting']);
-  backdrop_add_js(backdrop_get_path('module', 'footable') . '/footable.js');
+  backdrop_add_js(backdrop_get_path('module', 'footable') . '/js/footable.js');
   return theme('table', $variables);
 }
 
