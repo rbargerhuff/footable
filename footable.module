@@ -209,7 +209,7 @@ function template_preprocess_footable_view(&$vars) {
     elseif (is_numeric($field_handler->last_render)) {
       $vars['column_attributes'][$column]['data-type'] = 'numeric';
     }
-    elseif (backdrop_strlen($field_handler->last_render) != backdrop_strlen(strip_tags($field_handler->last_render))) {
+    elseif (!empty($field_handler->last_render) && backdrop_strlen($field_handler->last_render) != backdrop_strlen(strip_tags($field_handler->last_render))) {
       $vars['column_attributes'][$column]['data-type'] = 'html';
     }
     else {
